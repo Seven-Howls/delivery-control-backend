@@ -9,6 +9,14 @@ Esse comando vai ser resposnavel por instalar as dependencias do projeto, criar 
 npm run init
 ```
 
+### Rodar o projeto
+
+Para rodar o projeto em sua maquina execute o comando 
+
+```
+npm run dev
+```
+
 ## Dependências 
 
 **Node** : v20.11.1

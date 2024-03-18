@@ -15,6 +15,7 @@ DB_USER=root
 DB_PASSWORD=$MYSQL_PASSWORD
 DB_NAME=delivery-control
 DB_PORT=3306
+API_PORT=8080
 EOT
 
 echo "\n\n##.env criado com sucesso##"

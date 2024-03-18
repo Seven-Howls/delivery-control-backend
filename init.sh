@@ -7,7 +7,7 @@ read MYSQL_PASSWORD
 # Comando para criar um novo banco de dados
 mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE \`delivery-control\`;"
 
-echo "Banco de dados 'delivery-control' criado com sucesso."
+echo "\n\n##Banco de dados 'delivery-control' criado com sucesso.##"
 
 cat > '.env' <<EOT
 DB_HOST=localhost
@@ -17,4 +17,8 @@ DB_NAME=delivery-control
 DB_PORT=3306
 EOT
 
-echo ".env criado com sucesso"
+echo "\n\n##.env criado com sucesso##"
+
+npm install
+
+echo "\n\n##Dependencias instaladas com sucesso##"

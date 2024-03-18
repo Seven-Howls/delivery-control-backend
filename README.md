@@ -1,12 +1,14 @@
 # delivery-control-backend
 This repository contains the backend codebase for Delivery Control, providing the server-side functionality and APIs necessary to support the application's features.
 
-### Iniciando o banco de dados e os arquivos de ambiente
+### Iniciando o projeto 
 
-Lembrando que e necessari tem em sua maquina o mysql8 instalado
-
-Rode o comando abaixo e informe o usuario do mysql e a sua senha 
+Esse comando vai ser resposnavel por instalar as dependencias do projeto, criar a instancia do banco de dados e criar os arquivos de configuração
 
 ```
-sh init.sh
+npm run init
 ```
+
+## Dependências 
+
+**Node** : v20.11.1

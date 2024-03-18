@@ -1,4 +1,4 @@
-
+echo "Valor de $1"
 echo "User mysql"
 read MYSQL_USER
 echo "Password mysql"
@@ -15,6 +15,7 @@ DB_USER=root
 DB_PASSWORD=$MYSQL_PASSWORD
 DB_NAME=delivery-control
 DB_PORT=3306
+DB_DIALECT=mysql
 API_PORT=8080
 EOT
 
@@ -23,3 +24,16 @@ echo "\n\n##.env criado com sucesso##"
 npm install
 
 echo "\n\n##Dependencias instaladas com sucesso##"
+
+npx sequelize-cli db:migrate
+
+echo "\n\nMigrações executadas com sucesso"
+
+if [ "$1" = "limpa" ]; then
+  echo "\n\nA base subiu limpa"
+  
+else
+    npx sequelize-cli db:seed:all
+    echo "\n\nTodas as seeds foram executadas"
+  
+fi

@@ -1,10 +1,12 @@
 # delivery-control-backend
 This repository contains the backend codebase for Delivery Control, providing the server-side functionality and APIs necessary to support the application's features.
 
-### Criado o banco de dados
+### Iniciando o banco de dados e os arquivos de ambiente
 
-Para criar o banco de dados rode o comando sh abaixo e preencha os dados
+Lembrando que e necessari tem em sua maquina o mysql8 instalado
+
+Rode o comando abaixo e informe o usuario do mysql e a sua senha 
 
 ```
-sh create-database.sh 
+sh init.sh
 ```

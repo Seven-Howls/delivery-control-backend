@@ -2,18 +2,18 @@ import { DataTypes, Model } from "sequelize";
 import { Database } from "../database/sequelize";
 const databese = new Database();
 
-export interface Permissao {
+export interface    Permissoes{
     id:string;
     nome:string;
     nivel: number,
-    created_at: Date,
-    updated_at: Date,
-    deleted_at: Date
+    createdAt: Date,
+    updatedAt: Date,
+    deletedAt: Date | null
 }
 
-export interface PermissaoInstance extends Model<Permissao>,Permissao {}
+export interface PermissoesInstance extends Model<Permissoes>,Permissoes {}
 
-export const Permissao = databese.sequelize.define<PermissaoInstance,Permissao>("Permissao",{
+export const Permissoes = databese.sequelize.define<PermissoesInstance,Permissoes>("Permissoes",{
     id:{
         primaryKey: true,
         type: DataTypes.STRING,
@@ -28,15 +28,15 @@ export const Permissao = databese.sequelize.define<PermissaoInstance,Permissao>(
         unique: true,
         type: DataTypes.INTEGER
     },
-    created_at: {
+    createdAt: {
         allowNull: false,
         type: DataTypes.DATE
     },
-    updated_at: {
+    updatedAt: {
         allowNull: false,
         type: DataTypes.DATE
     },
-    deleted_at: {
+    deletedAt: {
         allowNull: true,
         type: DataTypes.DATE
     }

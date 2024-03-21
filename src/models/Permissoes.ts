@@ -1,17 +1,10 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { Timestemps } from "./Timestemps";
+import { PermissoesInterface, PermissoesInstance } from "../Interfaces/Permissoes";
+
 const databese = new Database();
 
-export interface Permissoes extends Timestemps {
-    id:string;
-    nome:string;
-    nivel: number,
-}
-
-export interface PermissoesInstance extends Model<Permissoes>,Permissoes {}
-
-export const Permissoes = databese.sequelize.define<PermissoesInstance,Permissoes>("Permissoes",{
+export const Permissoes = databese.sequelize.define<PermissoesInstance,PermissoesInterface>("Permissoes",{
     id:{
         primaryKey: true,
         type: DataTypes.STRING,

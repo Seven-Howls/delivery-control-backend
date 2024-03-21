@@ -1,14 +1,12 @@
 import { DataTypes, Model } from "sequelize";
 import { Database } from "../database/sequelize";
+import { Timestemps } from "./Timestemps";
 const databese = new Database();
 
-export interface    Permissoes{
+export interface Permissoes extends Timestemps {
     id:string;
     nome:string;
     nivel: number,
-    createdAt: Date,
-    updatedAt: Date,
-    deletedAt: Date | null
 }
 
 export interface PermissoesInstance extends Model<Permissoes>,Permissoes {}

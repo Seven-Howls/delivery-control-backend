@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { PermissoesInterface, PermissoesInstance } from "../Interfaces/Permissoes";
+import { PermissoesInterface, PermissoesInstance } from "../Definitions/Permissoes";
 
 const databese = new Database();
 

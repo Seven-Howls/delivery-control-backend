@@ -27,6 +27,14 @@ module.exports = {
             created_at: new Date(),
             updated_at: new Date(),
             deleted_at: null
+          },
+          {
+            id: uuidv4(),
+            nome: 'Cancelad',
+            nivel: 3,
+            created_at: new Date(),
+            updated_at: new Date(),
+            deleted_at: new Date()
           }
           // Adicione mais linhas conforme necessário
         ], {});

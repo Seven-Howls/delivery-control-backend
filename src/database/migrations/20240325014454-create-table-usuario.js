@@ -25,7 +25,7 @@ module.exports = {
             },
             celular: {
                 allowNull: false,
-                type: types.INTEGER
+                type: types.BIGINT
             },
             created_at: {
                 allowNull: false,

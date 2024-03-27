@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IPermissoes {
+interface IStatus {
     id: string,
     nome: string,
     nivel: number,
@@ -9,11 +9,9 @@ interface IPermissoes {
     deletedAt: Date | null
 }
 
-interface PermissoesInstance extends Model<IPermissoes>, IPermissoes { }
+interface StatusInstance extends Model<IStatus>, IStatus { }
 
 export {
-    IPermissoes,
-    PermissoesInstance
+    IStatus,
+    StatusInstance
 }
-
-

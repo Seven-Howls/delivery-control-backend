@@ -67,3 +67,5 @@ npx sequelize-cli db:seed:undo:all
 ## Dependências 
 
 **Node** : v20.11.1
+
+**MySql** : v8

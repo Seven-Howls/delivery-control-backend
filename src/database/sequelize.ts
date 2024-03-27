@@ -2,8 +2,8 @@ import { Sequelize } from "sequelize";
 import dotenv from 'dotenv';
 dotenv.config();
 
-export abstract class Database {
-    protected sequelize = new Sequelize({
+export class Database {
+    public sequelize = new Sequelize({
         dialect: "mysql",
         host: process.env.DB_HOST,
         port: Number(process.env.DB_PORT),

@@ -3,7 +3,8 @@ import { Model } from "sequelize";
 interface ITaxaEntrega {
     id: string,
     empresaId: string,
-    usuarioId: string,
+    descricao: string,
+    valor: number,
     createdAt: Date,
     updatedAt: Date,
     deletedAt: Date | null

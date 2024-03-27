@@ -2,10 +2,8 @@ import { Model } from "sequelize";
 
 interface IMotoboy {
     id: string,
-    nome: string,
-    cpf: string,
-    senha: string,
-    celular: number,
+    empresaId: string,
+    usuarioId: string,
     createdAt: Date,
     updatedAt: Date,
     deletedAt: Date | null

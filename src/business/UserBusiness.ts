@@ -15,8 +15,8 @@ export class UserBusiness {
 
     async login(data: TLoginData) {
         try {
-            const { cpf, senha } = data;
-            if (!cpf || !senha) {
+            const { cpf, password } = data;
+            if (!cpf || !password) {
               throw new CustomError("Campos inválidos", 422);
             }
       
@@ -26,7 +26,7 @@ export class UserBusiness {
             }
             
             const passwordIsCorrect = await this.securePassword.compare(
-                senha,
+                password,
                 user.senha
             );
 

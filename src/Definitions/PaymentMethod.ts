@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { MetodoPagamentoInstance, IMetodoPagamento } from "../models/InterfaceMetodoPagamento";
+import { PaymentMethodInstance, IPaymentMethod } from "../models/InterfacePaymentMethod";
 
 const database = new Database()
 
-export const MetodoPagamento = database.sequelize.define<MetodoPagamentoInstance, IMetodoPagamento>('MetodoPagamento',{
+export const PaymentMethod = database.sequelize.define<PaymentMethodInstance, IPaymentMethod>('MetodoPagamento',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

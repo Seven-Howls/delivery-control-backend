@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { ColaboradorInstance, IColaborador } from "../models/InterfaceColaborador";
+import { CollaboratorInstance, ICollaborator } from "../models/InterfaceCollaborator";
 
 const database = new Database()
 
-export const Colaborador = database.sequelize.define<ColaboradorInstance, IColaborador>('Colaboradores',{
+export const Collaborator = database.sequelize.define<CollaboratorInstance, ICollaborator>('Colaboradores',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

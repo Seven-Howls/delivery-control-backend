@@ -1,7 +1,8 @@
 import { Model } from "sequelize";
 
-interface IPermissoes {
+interface IUserType {
     id: string,
+    empresaId: string,
     nome: string,
     nivel: number,
     createdAt: Date,
@@ -9,11 +10,9 @@ interface IPermissoes {
     deletedAt: Date | null
 }
 
-interface PermissoesInstance extends Model<IPermissoes>, IPermissoes { }
+interface UserTypeInstance extends Model<IUserType>, IUserType { }
 
 export {
-    IPermissoes,
-    PermissoesInstance
+    IUserType,
+    UserTypeInstance
 }
-
-

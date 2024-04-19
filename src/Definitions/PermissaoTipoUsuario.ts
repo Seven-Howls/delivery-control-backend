@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { PermissoesTipoUsuarioInstance, IPermissoesTipoUsuario } from "../models/InterfacePermissoesTipoUsuario";
+import { UserTypePermissionsInstance, IUserTypePermissions } from "../models/InterfaceUserTypePermissions";
 
 const database = new Database()
 
-export const PermissoesTipoUsuario = database.sequelize.define<PermissoesTipoUsuarioInstance, IPermissoesTipoUsuario>('PermissoesTipoUsuario',{
+export const UserTypePermissions = database.sequelize.define<UserTypePermissionsInstance, IUserTypePermissions>('PermissoesTipoUsuario',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

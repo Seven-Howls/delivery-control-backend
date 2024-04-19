@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { EntregasInstance, IEntregas } from "../models/InterfaceEntregas";
+import { DeliveriesInstance, IDeliveries } from "../models/InterfaceDeliveries";
 
 const database = new Database()
 
-export const Entregas = database.sequelize.define<EntregasInstance, IEntregas>('Entregas',{
+export const Deliveries = database.sequelize.define<DeliveriesInstance, IDeliveries>('Entregas',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

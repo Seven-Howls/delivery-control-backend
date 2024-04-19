@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { UsuarioInstance, IUsuario } from "../models/interfaceUsuario";
+import { UserInstance, IUser } from "../models/interfaceUser";
 
 const database = new Database()
 
-export const Usuario = database.sequelize.define<UsuarioInstance, IUsuario>('Usuario',{
+export const User = database.sequelize.define<UserInstance, IUser>('Usuario',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

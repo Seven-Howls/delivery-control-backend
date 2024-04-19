@@ -1,15 +1,15 @@
-import { Usuario } from "../definitions/Usuario";
+import { User } from "../definitions/User";
 import { IUserData } from "../models/InterfaceUserData";
-import { IUsuario } from "../models/interfaceUsuario";
+import { IUser } from "../models/interfaceUser";
 import { Op } from "sequelize";
 
 export class UserData implements IUserData{
-    private user :  typeof Usuario;
+    private user :  typeof User;
 
     constructor(){
-        this.user = Usuario;
+        this.user = User;
     }
-    async findByCpf(cpf: string): Promise<IUsuario | null> {
+    async findByCpf(cpf: string): Promise<IUser | null> {
         try {
             const usuario = this.user.findOne({
                 attributes: ['id','senha'],

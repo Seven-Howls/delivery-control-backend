@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IUsuario {
+interface IUser {
     id: string,
     nome: string,
     cpf: string,
@@ -11,9 +11,9 @@ interface IUsuario {
     deletedAt: Date | null
 }
 
-interface UsuarioInstance extends Model<IUsuario>, IUsuario { }
+interface UserInstance extends Model<IUser>, IUser { }
 
 export {
-    IUsuario,
-    UsuarioInstance
+    IUser,
+    UserInstance
 }

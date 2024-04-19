@@ -1,32 +1,34 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
-import { TaxaEntregaInstance, ITaxaEntrega } from "../models/InterfaceTaxaEntrega";
+import { UserTypePermissionsInstance, IUserTypePermissions } from "../models/InterfaceUserTypePermissions";
 
 const database = new Database()
 
-export const TaxaEntrega = database.sequelize.define<TaxaEntregaInstance, ITaxaEntrega>('TaxaEntrega',{
+export const UserTypePermissions = database.sequelize.define<UserTypePermissionsInstance, IUserTypePermissions>('PermissoesTipoUsuario',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,
         allowNull: false
     },
-    empresaId: {
+    permissaoId: {
         allowNull: false,
         type: DataTypes.STRING,
-        references:{
-            model: 'empresas',
+        references: {
+            model: 'permissoes',
             key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
     },
-    descricao:{
+    tipoUsuarioId: {
         allowNull: false,
-        type: DataTypes.STRING
-    },
-    valor:{
-        type: DataTypes.INTEGER,
-        allowNull: false
+        type: DataTypes.STRING,
+        references: {
+            model: 'tipos_usuarios',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
     },
     createdAt: {
         allowNull: false,

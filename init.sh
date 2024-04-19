@@ -17,7 +17,8 @@ DB_NAME=delivery-control
 DB_PORT=3306
 DB_DIALECT=mysql
 API_PORT=8080
-BCRYPT_COST=12345
+BCRYPT_COST=10
+BCRYPT_KEY=12345
 EOT
 
 echo "\n\n##.env criado com sucesso##"

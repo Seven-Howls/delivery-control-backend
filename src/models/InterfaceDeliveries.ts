@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IEntregas {
+interface IDeliveries {
     id: string,
     taxaEntregaId: string,
     motoboyId: string,
@@ -15,9 +15,9 @@ interface IEntregas {
     deletedAt: Date | null
 }
 
-interface EntregasInstance extends Model<IEntregas>, IEntregas { }
+interface DeliveriesInstance extends Model<IDeliveries>, IDeliveries { }
 
 export {
-    IEntregas,
-    EntregasInstance
+    IDeliveries,
+    DeliveriesInstance
 }

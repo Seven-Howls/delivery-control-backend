@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 
-interface IColaborador {
+interface ICollaborator {
     id: string,
     tipoId: string,
     empresaId: string,
@@ -10,9 +10,9 @@ interface IColaborador {
     deletedAt: Date | null
 }
 
-interface ColaboradorInstance extends Model<IColaborador>, IColaborador { }
+interface CollaboratorInstance extends Model<ICollaborator>, ICollaborator { }
 
 export {
-    IColaborador,
-    ColaboradorInstance
+    ICollaborator,
+    CollaboratorInstance
 }

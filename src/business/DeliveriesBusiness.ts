@@ -17,7 +17,7 @@ export class DeliveriesBusiness {
     async getDeliveriessInProgressByMotoBoy(token: string, motoboyId:string){
         try{
             //if(!token) throw new CustomError("Token ausente na autenticação",422);
-            if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo", 422);
+            if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);
 
             //const isAuthorized = this.authenticator.getTokenData(token);
             //if(!isAuthorized) throw new CustomError("Não autorizado", 401);

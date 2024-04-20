@@ -5,7 +5,6 @@ module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface.bulkInsert('status', [
           {
-            id: uuidv4(),
             nome: 'Em andamento',
             nivel: 1,
             created_at: new Date(),
@@ -13,7 +12,6 @@ module.exports = {
             deleted_at: null
           },
           {
-            id: uuidv4(),
             nome: 'Concluído',
             nivel: 2,
             created_at: new Date(),
@@ -21,7 +19,6 @@ module.exports = {
             deleted_at: null
           },
           {
-            id: uuidv4(),
             nome: 'Cancelado',
             nivel: 3,
             created_at: new Date(),
@@ -29,7 +26,6 @@ module.exports = {
             deleted_at: null
           },
           {
-            id: uuidv4(),
             nome: 'Cancelad',
             nivel: 3,
             created_at: new Date(),

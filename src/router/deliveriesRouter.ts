@@ -9,7 +9,7 @@ const deliveriesData = new DeliveriesData();
 const motoboyData = new MotoboyData()
 
 const deliveriesBusiness = new DeliveriesBusiness(deliveriesData,motoboyData);
-console.log(deliveriesBusiness)
+
 const deliveriesController = new DeliveriesController(deliveriesBusiness);
 
 deliveriesRouter.get("/in-progress/:motoboyId", deliveriesController.getDeliveriessInProgressByMotoBoy);

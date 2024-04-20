@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Motoboy } from "../definitions/Motoboy";
 import { IMotoboy } from "../models/InterfaceMotoboy";
 import { IMotoboyData } from "../models/InterfaceMotoboyData";
@@ -12,7 +13,13 @@ export class MotoboyData implements IMotoboyData{
 
     async findById(motoboyId: string): Promise<IMotoboy | null> {
         try{
-            const motoboy = await this.motoboy.findByPk(motoboyId); 
+            const motoboy = await this.motoboy.findOne({
+                where: {
+                    id: motoboyId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                }}); 
 
             return motoboy
         }catch(error: any){

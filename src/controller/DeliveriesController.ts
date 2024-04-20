@@ -6,13 +6,11 @@ export class DeliveriesController{
     private deliveriesBusiness: DeliveriesBusiness;
 
     constructor(deliveriesBusiness: DeliveriesBusiness){
-        console.log(deliveriesBusiness)
         this.deliveriesBusiness = deliveriesBusiness;
     }
 
     getDeliveriessInProgressByMotoBoy= async( req: Request, res: Response): Promise<void> => {
         try{
-            console.log(this.deliveriesBusiness)
             const token = req.headers.authorization as string;
             const motoboyId = req.params.motoboyId;
             const deliveries = await this.deliveriesBusiness.getDeliveriessInProgressByMotoBoy(token,motoboyId);

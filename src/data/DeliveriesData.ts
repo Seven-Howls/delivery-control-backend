@@ -13,8 +13,11 @@ export class DeliveriesData implements IDeliveriesData {
     async findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null> {
         try{
             const inProgressDeliveries =  await this.deliveries.findAll({
+                attributes:{
+                    exclude:['deletedAt','updatedAt','createdAt','statusId']
+                },
                 where:{
-                    statusId : '7741ce1b-57e5-4bae-8c8d-c5fbaa769286',
+                    statusId : 1,
                     motoboyId,
                     deletedAt: {
                         [Op.is]: null
@@ -23,9 +26,11 @@ export class DeliveriesData implements IDeliveriesData {
                 include:[
                     {
                         model: Status,
-                        as: 'deliveries_status'
+                        as: 'deliveriesStatus',
+                        attributes: ['id','nome','nivel']
                     }
                 ]
+                
             });
 
             return inProgressDeliveries;

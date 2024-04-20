@@ -42,7 +42,7 @@ module.exports = {
             },
             status_id: {
                 allowNull: false,
-                type: types.STRING,
+                type: types.INTEGER,
                 references:{
                     model: 'status',
                     key: 'id'

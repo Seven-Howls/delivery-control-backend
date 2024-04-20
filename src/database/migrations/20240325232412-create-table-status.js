@@ -7,7 +7,8 @@ module.exports = {
         await queryInterface.createTable('status',{
             id: {
                 primaryKey: true,
-                type: types.STRING,
+                autoIncrement:true,
+                type: types.INTEGER,
                 allowNull: false
             },
             nome:{

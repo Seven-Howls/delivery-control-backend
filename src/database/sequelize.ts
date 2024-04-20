@@ -12,6 +12,7 @@ export class Database {
         password: process.env.DB_PASSWORD,
         define: {
             underscored: true
-        }
+        },
+        logging: !process.env.ENVIRONMENT_PROD
     })
 };

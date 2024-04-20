@@ -30,4 +30,4 @@ export const Status = database.sequelize.define<StatusInstance, IStatus>('Status
         allowNull: true,
         type: DataTypes.DATE
     }
-})
+},{tableName: 'status'})

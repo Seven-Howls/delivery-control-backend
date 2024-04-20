@@ -26,7 +26,7 @@ module.exports = {
                 nome: `Usuário ${i}`,
                 cpf: resultado, 
                 senha: hash,
-                celular: Number(`987654321${i}`), 
+                celular: Number(`7654321${i}`), 
                 created_at: new Date(),
                 updated_at: new Date(),
                 deleted_at: i % 5 ? null : new Date()

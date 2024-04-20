@@ -39,7 +39,7 @@ module.exports = {
         id: uuidv4(),
         taxa_entrega_id: taxaEntregaId,
         motoboy_id: motoboyId,
-        metodo_pagamento_is: metodoPagamentoId,
+        metodo_pagamento_id: metodoPagamentoId,
         status_id: statusId,
         valor_produto: valorProduto,
         taxa_servico: taxaServico,

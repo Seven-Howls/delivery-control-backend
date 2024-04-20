@@ -1,8 +1,7 @@
 import { Model, Op } from "sequelize";
-import { Deliveries } from "../definitions/Deliveries";
+import { Deliveries, Status } from "../definitions/index";
 import { IDeliveries } from "../models/InterfaceDeliveries";
 import { IDeliveriesData } from "../models/InterfaceDeliveriesData";
-import { Status } from "../definitions/Status";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries
@@ -11,12 +10,11 @@ export class DeliveriesData implements IDeliveriesData {
         this.deliveries = Deliveries
     }
     
-    async findInProgressDeliveriesByMotoboy(motoboyId: string): Promise<IDeliveries[] | null> {
+    async findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null> {
         try{
-
             const inProgressDeliveries =  await this.deliveries.findAll({
                 where:{
-                    statusId : 'd7d3207a-cfbc-4470-ada3-295ee46747c1',
+                    statusId : '7741ce1b-57e5-4bae-8c8d-c5fbaa769286',
                     motoboyId,
                     deletedAt: {
                         [Op.is]: null
@@ -25,7 +23,7 @@ export class DeliveriesData implements IDeliveriesData {
                 include:[
                     {
                         model: Status,
-                        as: 'status_deliveries'
+                        as: 'deliveries_status'
                     }
                 ]
             });

@@ -30,7 +30,7 @@ module.exports = {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE'
             },
-            metodo_pagamento_is: {
+            metodo_pagamento_id: {
                 allowNull: false,
                 type: types.STRING,
                 references:{

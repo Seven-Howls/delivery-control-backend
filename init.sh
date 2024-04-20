@@ -19,6 +19,7 @@ DB_DIALECT=mysql
 API_PORT=8080
 BCRYPT_COST=10
 BCRYPT_KEY=12345
+JWT_KEY=12345
 EOT
 
 echo "\n\n##.env criado com sucesso##"

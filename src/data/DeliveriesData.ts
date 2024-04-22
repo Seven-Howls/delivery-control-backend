@@ -1,4 +1,4 @@
-import { Model, Op, QueryTypes } from "sequelize";
+import { Op, QueryTypes } from "sequelize";
 import { Deliveries, Status } from "../definitions/index";
 import { IDeliveries } from "../models/InterfaceDeliveries";
 import { IDeliveriesData } from "../models/InterfaceDeliveriesData";
@@ -11,8 +11,21 @@ export class DeliveriesData implements IDeliveriesData {
     constructor(){
         this.deliveries = Deliveries
     }
-    
-    async findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null> {
+    getDeliveryByIdAndMotoboy = async (id: string, motoboyId: string): Promise<IDeliveries | null> => {
+        try {
+            const delivery = await this.deliveries.findOne({
+                where: {
+                    id,
+                    motoboyId
+                }
+            })
+
+            return delivery
+        } catch(error: any){
+            throw new Error(error.message);
+        }
+    }
+    findStatusInProgressByMotoboy = async (motoboyId: string): Promise<IDeliveries[] | null> => {
         try{
             const inProgressDeliveries =  await this.deliveries.findAll({
                 attributes:{
@@ -40,7 +53,7 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     }
-    async findHistoryByMotoboy(motoboyId: string): Promise< THistoryDeliveries[] | null | undefined> {
+    findHistoryByMotoboy = async (motoboyId: string): Promise< THistoryDeliveries[] | null | undefined> => {
         try{
             const history: THistoryDeliveries[] = await this.deliveries.sequelize?.query(
                 selectHistoryDeliveries,
@@ -55,7 +68,17 @@ export class DeliveriesData implements IDeliveriesData {
         }
     }
 
-    async updateStatusDelivery(deliveryId: string, statusId:string): Promise< void > {
-
+    updateStatusDeliveryById = async (deliveryId: string, statusId:string): Promise< void > => {
+        try {
+            this.deliveries.update({
+                statusId
+            },{
+                where: {
+                    id: deliveryId
+                }
+            })
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
     }
 }

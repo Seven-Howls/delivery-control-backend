@@ -24,17 +24,20 @@ module.exports = {
     const entregas = [];
 
     // Definir o número de entregas de exemplo
-    const numEntregas = 200;
+    const numEntregas = 1000;
 
     // Loop para criar entregas de exemplo
     for (let i = 1; i <= numEntregas; i++) {
+      const random = Math.floor(Math.random() * 3);
       const taxaEntregaId = taxasEntregas[Math.floor(Math.random() * taxasEntregas.length)];
       const motoboyId = motoboys[Math.floor(Math.random() * motoboys.length)];
       const metodoPagamentoId = metodosPagamentos[Math.floor(Math.random() * metodosPagamentos.length)];
       const statusId = status[Math.floor(Math.random() * status.length)];
       const valorProduto = Math.floor(Math.random() * 100) + 1; // Valor do produto aleatório entre 1 e 100
       const taxaServico = Math.floor(Math.random() * 20) + 1; // Taxa de serviço aleatória entre 1 e 20
-
+      const today = new Date();
+      const date = new Date(today);
+      date.setDate(today.getDate() - random)
       entregas.push({
         id: uuidv4(),
         taxa_entrega_id: taxaEntregaId,
@@ -45,9 +48,9 @@ module.exports = {
         taxa_servico: taxaServico,
         valor_liquido: valorProduto + taxaServico, // Valor líquido é a soma do valor do produto e da taxa de serviço
         comanda_id: Math.floor(Math.random() * 1000) + 1, // ID da comanda aleatório entre 1 e 1000
-        created_at: new Date(),
-        updated_at: new Date(),
-        deleted_at: i % 5 ? null : new Date()
+        created_at: date,
+        updated_at: date,
+        deleted_at: i % 5 ? null : date
       });
     }
 

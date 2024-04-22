@@ -1,7 +1,9 @@
-import { Model, Op } from "sequelize";
+import { Model, Op, QueryTypes } from "sequelize";
 import { Deliveries, Status } from "../definitions/index";
 import { IDeliveries } from "../models/InterfaceDeliveries";
 import { IDeliveriesData } from "../models/InterfaceDeliveriesData";
+import { THistoryDeliveries } from "../types/THistoryDeliveries";
+import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries
@@ -35,6 +37,20 @@ export class DeliveriesData implements IDeliveriesData {
 
             return inProgressDeliveries;
         }catch(error: any){
+            throw new Error(error.message);
+        }
+    }
+    async findHistoryByMotoboy(motoboyId: string): Promise< THistoryDeliveries[] | null | undefined> {
+        try{
+            const history: THistoryDeliveries[] = await this.deliveries.sequelize?.query(
+                selectHistoryDeliveries,
+                {
+                    type: QueryTypes.SELECT,
+                    replacements: { motoboyId }
+                }
+            ) as THistoryDeliveries[];
+            return history
+        }catch(error: any) {
             throw new Error(error.message);
         }
     }

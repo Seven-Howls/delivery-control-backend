@@ -13,3 +13,4 @@ const deliveriesBusiness = new DeliveriesBusiness(deliveriesData,motoboyData);
 const deliveriesController = new DeliveriesController(deliveriesBusiness);
 
 deliveriesRouter.get("/in-progress/:motoboyId", deliveriesController.getDeliveriessInProgressByMotoBoy);
+deliveriesRouter.get("/history/:motoboyId", deliveriesController.getHistoryDeliveriesByMotoboy);

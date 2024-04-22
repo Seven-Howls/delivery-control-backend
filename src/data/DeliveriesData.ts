@@ -54,4 +54,8 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     }
+
+    async updateStatusDelivery(deliveryId: string, statusId:string): Promise< void > {
+
+    }
 }

@@ -16,7 +16,10 @@ export class DeliveriesData implements IDeliveriesData {
             const delivery = await this.deliveries.findOne({
                 where: {
                     id,
-                    motoboyId
+                    motoboyId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
                 }
             })
 
@@ -68,7 +71,7 @@ export class DeliveriesData implements IDeliveriesData {
         }
     }
 
-    updateStatusDeliveryById = async (deliveryId: string, statusId:string): Promise< void > => {
+    updateStatusDeliveryById = async (deliveryId: string, statusId: string): Promise< void > => {
         try {
             this.deliveries.update({
                 statusId

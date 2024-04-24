@@ -1,4 +1,4 @@
-import { User } from "../definitions/User";
+import { User } from "../definitions/index";
 import { IUserData } from "../models/InterfaceUserData";
 import { IUser } from "../models/interfaceUser";
 import { Op } from "sequelize";

@@ -1,9 +1,8 @@
 import { Op } from "sequelize";
-import { Motoboy } from "../definitions/Motoboy";
+import { Motoboy, Company } from "../definitions/index";
 import { IMotoboy } from "../models/InterfaceMotoboy";
 import { IMotoboyData } from "../models/InterfaceMotoboyData";
 import { CustomError } from "../utils/CustomError";
-import { Company } from "../definitions/Company";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy

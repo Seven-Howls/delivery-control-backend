@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Status } from "../definitions";
+import { Status } from "../definitions/index";
 import { IStatus } from "../models/InterfaceStatus";
 import { IStatusData } from "../models/InterfaceStatusData";
 import { CustomError } from "../utils/CustomError";

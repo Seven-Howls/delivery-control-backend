@@ -1,4 +1,4 @@
-import { IMotoboyData } from "../models/InterfaceMotoboyData";
+import { IMotoboyData } from "../models/InterfaceMotoboy";
 import { Authenticator } from "../services/Authenticator";
 import { CustomError } from "../utils/CustomError";
 

@@ -1,8 +1,8 @@
 import { Deliveries } from "./Deliveries";
-import { Status } from "./Status";
 import { Motoboy } from "./Motoboy";
-import { Company } from "./Company";
 import { User } from "./User";
+import { Company } from "./Company";
+import { Status } from "./Status";
 
 Deliveries.belongsTo(Status, { foreignKey: 'statusId' , as: 'deliveriesStatus'})
 Status.hasMany(Deliveries,{foreignKey: 'statusId', as: 'deliveriesStatus'})

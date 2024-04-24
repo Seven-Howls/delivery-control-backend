@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { userRouter } from './router/userRouter';
 import { deliveriesRouter } from './router/deliveriesRouter';
+import { motoboyRouter } from './router/motoboyRouter';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.get('')
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/deliveries',deliveriesRouter)
+app.use('/api/v1/motoboys', motoboyRouter)
 
 const port = process.env.API_PORT || 3000;
 app.listen(port,() => {

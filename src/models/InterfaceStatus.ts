@@ -11,7 +11,12 @@ interface IStatus {
 
 interface StatusInstance extends Model<IStatus>, IStatus { }
 
+interface IStatusData {
+    getStatusById(id: string): Promise<IStatus | null>
+}
+
 export {
     IStatus,
-    StatusInstance
+    StatusInstance,
+    IStatusData
 }

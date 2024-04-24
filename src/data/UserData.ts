@@ -1,6 +1,5 @@
 import { User } from "../Definitions/index";
-import { IUserData } from "../models/InterfaceUserData";
-import { IUser } from "../models/interfaceUser";
+import { IUser, IUserData } from "../models/interfaceUser";
 import { Op } from "sequelize";
 
 export class UserData implements IUserData{

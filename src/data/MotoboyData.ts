@@ -1,7 +1,6 @@
 import { Op } from "sequelize";
 import { Motoboy, Company } from "../Definitions/index";
-import { IMotoboy } from "../models/InterfaceMotoboy";
-import { IMotoboyData } from "../models/InterfaceMotoboyData";
+import { IMotoboy, IMotoboyData } from "../models/InterfaceMotoboy";
 import { CustomError } from "../utils/CustomError";
 
 export class MotoboyData implements IMotoboyData{

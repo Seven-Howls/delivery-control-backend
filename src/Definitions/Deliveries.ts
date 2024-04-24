@@ -1,12 +1,11 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
 import { DeliveriesInstance, IDeliveries } from "../models/InterfaceDeliveries";
-import { Status } from "./Status";
 
 const database = new Database()
 
 
-const Deliveries = database.sequelize.define<DeliveriesInstance, IDeliveries>('Entregas',{
+export const Deliveries = database.sequelize.define<DeliveriesInstance, IDeliveries>('Entregas',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,
@@ -81,8 +80,3 @@ const Deliveries = database.sequelize.define<DeliveriesInstance, IDeliveries>('E
         type: DataTypes.DATE
     }
 })
-
-Deliveries.belongsTo(Status, { foreignKey: 'statusId' , as: 'deliveriesStatus'})
-Status.hasMany(Deliveries,{foreignKey: 'statusId', as: 'deliveriesStatus'})
-
-export { Deliveries }

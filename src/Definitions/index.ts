@@ -1,7 +1,7 @@
-import { Company } from "./Company";
 import { Deliveries } from "./Deliveries";
-import { Motoboy } from "./Motoboy";
 import { Status } from "./Status";
+import { Motoboy } from "./Motoboy";
+import { Company } from "./Company";
 import { User } from "./User";
 
 Deliveries.belongsTo(Status, { foreignKey: 'statusId' , as: 'deliveriesStatus'})

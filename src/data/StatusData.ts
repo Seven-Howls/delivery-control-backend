@@ -5,7 +5,7 @@ import { IStatusData } from "../models/InterfaceStatusData";
 import { CustomError } from "../utils/CustomError";
 
 export class StatusData implements IStatusData {
-    private status: typeof Status
+    private status: any
 
     constructor() {
         this.status = Status

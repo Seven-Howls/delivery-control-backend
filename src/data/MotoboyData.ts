@@ -5,7 +5,7 @@ import { IMotoboyData } from "../models/InterfaceMotoboyData";
 import { CustomError } from "../utils/CustomError";
 
 export class MotoboyData implements IMotoboyData{
-    private motoboy: typeof Motoboy
+    private motoboy: any
 
     constructor() {
         this.motoboy = Motoboy

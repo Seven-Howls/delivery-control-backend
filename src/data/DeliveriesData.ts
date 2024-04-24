@@ -6,7 +6,7 @@ import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
 
 export class DeliveriesData implements IDeliveriesData {
-    private deliveries: typeof Deliveries
+    private deliveries: any
 
     constructor(){
         this.deliveries = Deliveries

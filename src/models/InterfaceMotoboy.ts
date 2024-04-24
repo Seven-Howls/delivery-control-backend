@@ -11,7 +11,13 @@ interface IMotoboy {
 
 interface MotoboyInstance extends Model<IMotoboy>, IMotoboy { }
 
+interface IMotoboyData {
+    findById(motoboyId: string): Promise<IMotoboy | null>
+    findMotoboyByUserId(userId: string): Promise<any>
+}
+
 export {
     IMotoboy,
-    MotoboyInstance
+    MotoboyInstance,
+    IMotoboyData
 }

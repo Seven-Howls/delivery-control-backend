@@ -13,7 +13,12 @@ interface IUser {
 
 interface UserInstance extends Model<IUser>, IUser { }
 
+interface IUserData{
+    findByCpf(cpf: string): Promise<IUser | null>
+}
+
 export {
     IUser,
-    UserInstance
+    UserInstance,
+    IUserData
 }

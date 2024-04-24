@@ -1,7 +1,6 @@
 import { Op } from "sequelize";
 import { Status } from "../Definitions/index";
-import { IStatus } from "../models/InterfaceStatus";
-import { IStatusData } from "../models/InterfaceStatusData";
+import { IStatus, IStatusData } from "../models/InterfaceStatus";
 import { CustomError } from "../utils/CustomError";
 
 export class StatusData implements IStatusData {

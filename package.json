@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "This repository contains the backend codebase for Delivery Control, providing the server-side functionality and APIs necessary to support the application's features.",
   "main": "index.js",
+  "engines": {
+    "node": "20.11.1"
+  },
   "scripts": {
     "init": "sh init.sh",
-    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
+    "start": "node ./build/server.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

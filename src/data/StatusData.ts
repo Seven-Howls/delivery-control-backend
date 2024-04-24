@@ -1,11 +1,11 @@
 import { Op } from "sequelize";
-import { Status } from "../definitions";
+import { Status } from "../definitions/Status";
 import { IStatus } from "../models/InterfaceStatus";
 import { IStatusData } from "../models/InterfaceStatusData";
 import { CustomError } from "../utils/CustomError";
 
 export class StatusData implements IStatusData {
-    private status: typeof Status
+    private status: any
 
     constructor() {
         this.status = Status

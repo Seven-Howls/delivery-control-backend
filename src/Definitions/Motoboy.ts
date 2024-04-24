@@ -1,10 +1,11 @@
 import { DataTypes } from "sequelize";
 import { Database } from "../database/sequelize";
 import { MotoboyInstance, IMotoboy } from "../models/InterfaceMotoboy";
+import { Company } from "./Company";
 
 const database = new Database()
 
-export const Motoboy = database.sequelize.define<MotoboyInstance, IMotoboy>('Motoboy',{
+const Motoboy = database.sequelize.define<MotoboyInstance, IMotoboy>('Motoboy',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,
@@ -43,3 +44,8 @@ export const Motoboy = database.sequelize.define<MotoboyInstance, IMotoboy>('Mot
         type: DataTypes.DATE
     }
 })
+
+Motoboy.belongsTo(Company,{foreignKey:'empresaId', as: 'motoboyCompany'})
+Company.hasMany(Motoboy,{foreignKey:'empresaId', as: 'motoboyCompany'})
+
+export { Motoboy }

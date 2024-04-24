@@ -6,7 +6,7 @@ import { CustomError } from "../utils/CustomError";
 import { Company } from "../definitions/Company";
 
 export class MotoboyData implements IMotoboyData{
-    private motoboy: typeof Motoboy
+    private motoboy: any
 
     constructor() {
         this.motoboy = Motoboy

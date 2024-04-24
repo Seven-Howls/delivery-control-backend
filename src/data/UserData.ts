@@ -4,7 +4,7 @@ import { IUser } from "../models/interfaceUser";
 import { Op } from "sequelize";
 
 export class UserData implements IUserData{
-    private user :  typeof User;
+    private user: any
 
     constructor(){
         this.user = User;

@@ -1,5 +1,5 @@
 import { Op, QueryTypes } from "sequelize";
-import { Deliveries, Status } from "../definitions/index";
+import { Deliveries, Status } from "../definitions/relations";
 import { IDeliveries } from "../models/InterfaceDeliveries";
 import { IDeliveriesData } from "../models/InterfaceDeliveriesData";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";

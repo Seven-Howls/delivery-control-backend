@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Motoboy, Company } from "../definitions/index";
+import { Motoboy, Company } from "../definitions/relations";
 import { IMotoboy } from "../models/InterfaceMotoboy";
 import { IMotoboyData } from "../models/InterfaceMotoboyData";
 import { CustomError } from "../utils/CustomError";

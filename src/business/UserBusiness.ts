@@ -1,6 +1,5 @@
-import { IUserData } from "../models/InterfaceUserData";
+import { IUserData } from "../models/interfaceUser";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
-import { TSignupData } from "../types/SignupData";
 import { TLoginData } from "../types/TLoginData";
 import { CustomError } from "../utils/CustomError";
 

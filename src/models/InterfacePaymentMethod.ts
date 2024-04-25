@@ -10,7 +10,12 @@ interface IPaymentMethod {
 
 interface PaymentMethodInstance extends Model<IPaymentMethod>, IPaymentMethod { }
 
+interface IPaymentMethodData {
+    findPaymentMethod(): Promise<IPaymentMethod | any>
+}
+
 export {
     IPaymentMethod,
+    IPaymentMethodData,
     PaymentMethodInstance
 }

@@ -15,6 +15,7 @@ interface UserInstance extends Model<IUser>, IUser { }
 
 interface IUserData{
     findByCpf(cpf: string): Promise<IUser | null>
+    findById(id: string): Promise<IUser | null>
 }
 
 export {

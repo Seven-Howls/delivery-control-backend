@@ -7,7 +7,7 @@ export class UserController {
     this.userBusiness = userBusiness;
   }
 
-  /* signup = async (req: Request, res: Response): Promise<void> => {
+  /* signupCollaborator = async (req: Request, res: Response): Promise<void> => {
     try {
       const { name, email, password } = req.body;
       const token = await this.userBusiness.signup({ name, email, password });

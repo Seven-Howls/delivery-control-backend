@@ -1,6 +1,8 @@
 import { User } from "../Definitions/index";
 import { IUser, IUserData } from "../models/interfaceUser";
 import { Op } from "sequelize";
+import { TSignupUserData } from "../types/TSignupUserData";
+import { v4 as uuid4} from "uuid";
 
 export class UserData implements IUserData{
     private user: typeof User
@@ -40,6 +42,25 @@ export class UserData implements IUserData{
 
             return user;
         } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    insertUser = async (data: TSignupUserData): Promise<IUser | null> => {
+        try{
+            const user = await this.user.create({
+                id: uuid4(),
+                celular: data.celular,
+                cpf: data.cpf,
+                nome: data.nome,
+                senha: data.password,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            })
+            await user.save(); 
+
+            return user;
+        }  catch (error: any) {
             throw new Error(error.message);
         }
     }

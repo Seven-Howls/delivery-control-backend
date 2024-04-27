@@ -4,7 +4,7 @@ import { PaymentMethodInstance, IPaymentMethod } from "../models/InterfacePaymen
 
 const database = new Database()
 
-export const PaymentMethod = database.sequelize.define<PaymentMethodInstance, IPaymentMethod>('MetodoPagamento',{
+export const PaymentMethod = database.sequelize.define<PaymentMethodInstance, IPaymentMethod>('MetodosPagamento',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

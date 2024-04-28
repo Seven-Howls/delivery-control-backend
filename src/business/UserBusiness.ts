@@ -16,6 +16,7 @@ export class UserBusiness {
     signupCollaborator = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
         try {
             if(!dataUser) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+            //TODO : Verificar ser os dados de usuario estao corretos
             if(!companyId) throw new CustomError("companyId não enviado", 422);
             if(!typeId) throw new CustomError("typeId não enviado", 422);
             //if(!token) throw new CustomError("Token ausente na autenticação",422);

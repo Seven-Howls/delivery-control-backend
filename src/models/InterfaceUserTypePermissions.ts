@@ -2,7 +2,7 @@ import { Model } from "sequelize";
 
 interface IUserTypePermissions {
     id: string,
-    permissaoId: string,
+    permissaoId: number,
     tipoUsuarioId: string,
     createdAt: Date,
     updatedAt: Date,

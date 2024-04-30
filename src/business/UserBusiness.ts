@@ -1,3 +1,5 @@
+import { ICollaboratorData } from "../models/InterfaceCollaborator";
+import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { IUserData } from "../models/interfaceUser";
 import { Authenticator } from "../services/Authenticator";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
@@ -7,11 +9,15 @@ import { CustomError } from "../utils/CustomError";
 
 export class UserBusiness {
     private userData: IUserData;
+    private collaboratorData: ICollaboratorData;
+    private userTypePermissionsData: IUserTypePermissionsData;
     private securePassword: SecurePasswordHandler;
     private authenticator: Authenticator;
 
-    constructor(userData: IUserData){
+    constructor(userData: IUserData, collaboratorData: ICollaboratorData, userTypePermissionsData: IUserTypePermissionsData) {
         this.userData = userData;
+        this.collaboratorData = collaboratorData;
+        this.userTypePermissionsData = userTypePermissionsData;
         this.securePassword = new SecurePasswordHandler();
         this.authenticator = new Authenticator();
     }
@@ -23,10 +29,16 @@ export class UserBusiness {
             if(!companyId) throw new CustomError("companyId não enviado", 422);
             if(!typeId) throw new CustomError("typeId não enviado", 422);
             //if(!token) throw new CustomError("Token ausente na autenticação",422);
-            //const isAuthorized = this.authenticator.getTokenData(token);
-            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
             //TODO : Verificar se o usuario tem permissao para criar usuario
-            const user = await this.userData.findByCpf(dataUser.cpf);
+            const collaboratorCreated = await this.collaboratorData.findById(isAuthorized.id);
+            if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
+            if(collaboratorCreated.empresaId !== companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
+            //TODO : Verificar se o perfil esta autorizado a usar essa funcionalidade
+            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 7)
+            if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
             //TODO : Verificar se usuario a ser criado ja existe
             //TODO : Verificar se a Empresa existe
             //TODO : Verificar se tipo do usuario exite e se pertence a empresa enviada

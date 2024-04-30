@@ -13,7 +13,7 @@ export class DeliveriesController{
         try{
             const token = req.headers.authorization as string;
             const motoboyId = req.params.motoboyId;
-            const deliveries = await this.deliveriesBusiness.getDeliveriessInProgressByMotoBoy(token,motoboyId);
+            const deliveries = await this.deliveriesBusiness.getDeliveriesInProgressByMotoBoy(token,motoboyId);
             
             res.status(200).json(deliveries).send();
         }catch(error: CustomError | any){

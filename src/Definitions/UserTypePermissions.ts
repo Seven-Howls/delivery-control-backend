@@ -12,7 +12,7 @@ export const UserTypePermissions = database.sequelize.define<UserTypePermissions
     },
     permissaoId: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         references: {
             model: 'permissoes',
             key: 'id'

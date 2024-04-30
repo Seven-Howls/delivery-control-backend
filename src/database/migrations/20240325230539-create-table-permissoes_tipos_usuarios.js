@@ -12,7 +12,7 @@ module.exports = {
             },
             permissao_id: {
                 allowNull: false,
-                type: types.STRING,
+                type: types.INTEGER,
                 references: {
                     model: 'permissoes',
                     key: 'id'

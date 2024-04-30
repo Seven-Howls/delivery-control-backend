@@ -17,7 +17,7 @@ export class DeliveriesBusiness {
         this.authenticator = new Authenticator();
     }
 
-    getDeliveriessInProgressByMotoBoy = async (token: string, motoboyId:string) => {
+    getDeliveriesInProgressByMotoBoy = async (token: string, motoboyId:string) => {
         try{
             //if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);

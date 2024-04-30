@@ -1,4 +1,5 @@
 import { IUserData } from "../models/interfaceUser";
+import { Authenticator } from "../services/Authenticator";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
 import { TLoginData } from "../types/TLoginData";
 import { TSignupUserData } from "../types/TSignupUserData";
@@ -7,10 +8,12 @@ import { CustomError } from "../utils/CustomError";
 export class UserBusiness {
     private userData: IUserData;
     private securePassword: SecurePasswordHandler;
+    private authenticator: Authenticator;
 
     constructor(userData: IUserData){
         this.userData = userData;
         this.securePassword = new SecurePasswordHandler();
+        this.authenticator = new Authenticator();
     }
 
     signupCollaborator = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
@@ -23,6 +26,7 @@ export class UserBusiness {
             //const isAuthorized = this.authenticator.getTokenData(token);
             //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
             //TODO : Verificar se o usuario tem permissao para criar usuario
+            const user = await this.userData.findByCpf(dataUser.cpf);
             //TODO : Verificar se usuario a ser criado ja existe
             //TODO : Verificar se a Empresa existe
             //TODO : Verificar se tipo do usuario exite e se pertence a empresa enviada
@@ -55,8 +59,10 @@ export class UserBusiness {
             if (!passwordIsCorrect) {
                 throw new CustomError("Senha incorreta", 401);
             }
-        
-            return user;
+
+            const token = this.authenticator.generateToken({id: user.id});
+            
+            return token;
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

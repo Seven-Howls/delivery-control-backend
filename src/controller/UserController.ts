@@ -26,7 +26,7 @@ export class UserController {
         try {
             const { cpf, password } = req.body;
             const token = await this.userBusiness.login({ cpf, password });
-            res.status(200).json(token).send();
+            res.status(200).json({ token }).send();
         } catch (error: any) {
             res.status(error.statusCode || 400).send({ error: error.message });
         }

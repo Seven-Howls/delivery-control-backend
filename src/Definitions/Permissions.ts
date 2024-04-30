@@ -7,7 +7,7 @@ const databese = new Database();
 export const Permissions = databese.sequelize.define<PermissionsInstance, IPermissions>("Permissoes", {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     nome: {

@@ -15,7 +15,7 @@ interface IUser {
 interface UserInstance extends Model<IUser>, IUser { }
 
 interface IUserData{
-    findByCpf(cpf: string): Promise<IUser | null>
+    findByCpf(cpf: string, deleted: boolean): Promise<IUser | null>
     findById(id: string): Promise<IUser | null>
     insertUser(data: TSignupUserData): Promise<IUser | null>
 }

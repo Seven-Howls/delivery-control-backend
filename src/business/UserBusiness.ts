@@ -1,4 +1,5 @@
 import { ICollaboratorData } from "../models/InterfaceCollaborator";
+import { ICompanyData } from "../models/InterfaceCompany";
 import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { IUserData } from "../models/interfaceUser";
 import { Authenticator } from "../services/Authenticator";
@@ -11,13 +12,15 @@ export class UserBusiness {
     private userData: IUserData;
     private collaboratorData: ICollaboratorData;
     private userTypePermissionsData: IUserTypePermissionsData;
+    private companyData : ICompanyData;
     private securePassword: SecurePasswordHandler;
     private authenticator: Authenticator;
 
-    constructor(userData: IUserData, collaboratorData: ICollaboratorData, userTypePermissionsData: IUserTypePermissionsData) {
+    constructor(userData: IUserData, collaboratorData: ICollaboratorData, userTypePermissionsData: IUserTypePermissionsData, companyData: ICompanyData) {
         this.userData = userData;
         this.collaboratorData = collaboratorData;
         this.userTypePermissionsData = userTypePermissionsData;
+        this.companyData = companyData;
         this.securePassword = new SecurePasswordHandler();
         this.authenticator = new Authenticator();
     }
@@ -39,11 +42,22 @@ export class UserBusiness {
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
             const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 7)
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
-            //TODO : Verificar se usuario a ser criado ja existe
             //TODO : Verificar se a Empresa existe
+            const company = await this.companyData.findById(companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404);
+            //TODO : Verificar se usuario a ser criado ja existe
+            const user = await this.userData.findByCpf(dataUser.cpf, true);
+            if(!user){
+                //TODO : Criar o usuario
+            } else if(!user.deletedAt){
+                //TODO : Reativar o usuario
+            }
             //TODO : Verificar se tipo do usuario exite e se pertence a empresa enviada
-            //TODO : Criar o usuario caso nao exista
+
+            //TODO : Verificar se nao existe ja um colaborado com mesmo usuario e empresa
+
             //TODO : Criar o registro do usuario na tabela colaborador, criar a senha baseada no cpf ? para primeiro acesso
+            
             //TODO : retonar mensagem que o colaborador foi criado( Dizer que a senha e o cpf do colaborador ?)
 
         } catch (error: any) {
@@ -58,7 +72,7 @@ export class UserBusiness {
               throw new CustomError("Campos inválidos", 422);
             }
       
-            const user = await this.userData.findByCpf(cpf);
+            const user = await this.userData.findByCpf(cpf,false);
             if (!user) {
               throw new CustomError("Usuário não encontrado", 404);
             }

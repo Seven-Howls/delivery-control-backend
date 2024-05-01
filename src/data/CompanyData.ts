@@ -25,4 +25,5 @@ export class CompanyData implements ICompanyData{
             throw new Error(error.message);
         }
     }
+
 }

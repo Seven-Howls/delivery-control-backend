@@ -25,4 +25,19 @@ export class CollaboratorData implements ICollaboratorData {
             throw new Error(error.message);
         }
     }
+    
+    findByUserIdAndCompanyId = async (userId: string, companyId: string): Promise<ICollaborator | null> => {
+        try {
+            const collaborato = await this.collaboratorData.findOne({
+                where: {
+                    usuarioId: userId,
+                    empresaId: companyId
+                }
+            });
+
+            return collaborato;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
 }

@@ -3,6 +3,7 @@ import { IUser, IUserData } from "../models/interfaceUser";
 import { Op } from "sequelize";
 import { TSignupUserData } from "../types/TSignupUserData";
 import { v4 as uuid4 } from "uuid";
+import { TUpdateUser } from "../types/TUpdateUser";
 
 export class UserData implements IUserData {
     private user: typeof User
@@ -60,6 +61,18 @@ export class UserData implements IUserData {
             await user.save();
 
             return user;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    updateUser = async (data: TUpdateUser): Promise<void> => {
+        try {
+            const user = await this.user.update(data, {
+                where: {
+                    id: data.id
+                }
+            })
         } catch (error: any) {
             throw new Error(error.message);
         }

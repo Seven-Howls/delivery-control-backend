@@ -13,6 +13,7 @@ interface UserTypePermissionsInstance extends Model<IUserTypePermissions>, IUser
 
 interface IUserTypePermissionsData {
     findByTypeUser(typeUser: string): Promise<IUserTypePermissions[] | null>
+    findById(id: string): Promise<IUserTypePermissions | null>
 }
 
 export {

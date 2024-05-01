@@ -14,6 +14,7 @@ interface CollaboratorInstance extends Model<ICollaborator>, ICollaborator { }
 
 interface ICollaboratorData {
     findById(id: string): Promise<ICollaborator | null>
+    findByUserIdAndCompanyId(userId: string, companyId: string): Promise<ICollaborator | null >
 }
 
 export {

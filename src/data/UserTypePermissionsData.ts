@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { UserTypePermissions } from "../Definitions/UserTypePermissions";
 import { IUserTypePermissions, IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 
@@ -21,5 +22,22 @@ export class UserTypePermissionsData implements IUserTypePermissionsData {
             throw new Error(error.message)
         }
         
+    }
+    
+    findById = async (id: string): Promise<IUserTypePermissions | null> => {
+        try {
+            const userTypePermissionsData = await this.userTypePermissions.findOne({
+                where: {
+                    id,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                }
+            });
+
+            return userTypePermissionsData;
+        } catch (error: any) {
+            throw new Error(error.message)
+        }
     }
 }

@@ -4,7 +4,7 @@ import { UserTypePermissionsInstance, IUserTypePermissions } from "../models/Int
 
 const database = new Database()
 
-export const UserTypePermissions = database.sequelize.define<UserTypePermissionsInstance, IUserTypePermissions>('PermissoesTipoUsuario',{
+export const UserTypePermissions = database.sequelize.define<UserTypePermissionsInstance, IUserTypePermissions>('PermissoesTiposUsuario',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,
@@ -12,7 +12,7 @@ export const UserTypePermissions = database.sequelize.define<UserTypePermissions
     },
     permissaoId: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         references: {
             model: 'permissoes',
             key: 'id'

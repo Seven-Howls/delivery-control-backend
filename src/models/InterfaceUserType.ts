@@ -12,7 +12,12 @@ interface IUserType {
 
 interface UserTypeInstance extends Model<IUserType>, IUserType { }
 
+interface IUserTypeData {
+    findById(id: string): Promise<IUserType | null>
+}
+
 export {
     IUserType,
-    UserTypeInstance
+    UserTypeInstance,
+    IUserTypeData
 }

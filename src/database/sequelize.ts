@@ -13,6 +13,6 @@ export class Database {
         define: {
             underscored: true
         },
-        logging: !process.env.ENVIRONMENT_PROD
+        logging: true
     })
 };

@@ -7,7 +7,7 @@ module.exports = {
         await queryInterface.createTable('permissoes', {
             id: {
                 primaryKey: true,
-                type: types.STRING,
+                type: types.INTEGER,
                 allowNull: false
             },
             nome: {

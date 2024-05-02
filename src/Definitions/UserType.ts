@@ -4,7 +4,7 @@ import { UserTypeInstance, IUserType } from "../models/InterfaceUserType";
 
 const database = new Database()
 
-export const UserType = database.sequelize.define<UserTypeInstance, IUserType>('TipoUsuario',{
+export const UserType = database.sequelize.define<UserTypeInstance, IUserType>('TiposUsuario',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

@@ -21,7 +21,7 @@ interface ICompany {
 interface CompanyInstance extends Model<ICompany>, ICompany { }
 
 interface ICompanyData{
-    findCompanyByUserId(userId: string): Promise<ICompany | null>
+    findById(id: string): Promise<ICompany | null>
 }
 
 export {

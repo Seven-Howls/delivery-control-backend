@@ -39,6 +39,10 @@ export class UserBusiness {
             if(!dataUser) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
             if(!companyId) throw new CustomError("companyId não enviado", 422);
+        
+            const company = await this.companyData.findById(companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404);
+
             if(!typeId) throw new CustomError("typeId não enviado", 422);
             if(!token) throw new CustomError("Token ausente na autenticação",422);
 
@@ -51,30 +55,33 @@ export class UserBusiness {
             
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
             const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 7)
+
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
            
-            const company = await this.companyData.findById(companyId);
-            if(!company) throw new CustomError("Empresa não encontrada", 404);
-            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
+            console.log(user?.deletedAt)
             if(!user){
                 user = await this.userData.insertUser(dataUser);
-            } else if(!user.deletedAt){
-                const {createdAt , updatedAt, ...userUpdate} = user;
-                userUpdate.deletedAt = null;
+            } else if(user.deletedAt){
+                const userUpdate = {
+                    id: user.id,
+                    nome: user.nome,
+                    cpf: user.cpf,
+                    celular: user.celular,
+                    deletedAt: null
+                }
                 await this.userData.updateUser(userUpdate);
             }
-            //TODO : Verificar se tipo do usuario exite e se pertence a empresa enviada
+
             const userType = await this.userTypeData.findById(typeId);
+
             if(!userType) throw new CustomError("Typo de usuario nao encontrado",404);
             if(userType.empresaId !== companyId) throw new CustomError("Typo nao pertence a essa empresas",422);
 
-            //TODO : Verificar se nao existe ja um colaborado com mesmo usuario e empresa
+            const collaborator = await this.collaboratorData.findByUserIdAndCompanyId(user?.id as string,companyId)
+            if(collaborator) throw new  CustomError("Colaborador ja existente", 409);	
 
-            //TODO : Criar o registro do usuario na tabela colaborador, criar a senha baseada no cpf ? para primeiro acesso
-            
-            //TODO : retonar mensagem que o colaborador foi criado( Dizer que a senha e o cpf do colaborador ?)
-
+            await this.collaboratorData.insertCollaborator(user?.id as string, companyId, typeId);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

@@ -1,5 +1,5 @@
 export type TUpdateUser = {
-    id: string,
+    id?: string,
     nome?: string,
     cpf?: string,
     password?: string,

@@ -9,14 +9,10 @@ export class UserController {
 
     signupCollaborator = async (req: Request, res: Response): Promise<void> => {
         try {
-            //TODO : Pegar o token
             const token = req.headers.authorization as string;
-            //TODO : Pegar os dados de usuario empresa e tipo do body
             const {user, companyId, typeId} = req.body;
-            //TODO : Chamar a funcao do business
             await this.userBusiness.signupCollaborator(user, companyId, typeId, token);
-            //TODO : Retorna somente uma mensagem dizendoq eu usuario foi criado
-            res.status(201).send({message: "Usuario criado com sucesso"});
+            res.status(201).send({message: "Colaborador criado com sucesso"});
         } catch (error: any) {
             res.status(error.statusCode || 400).send({ error: error.message });
         }

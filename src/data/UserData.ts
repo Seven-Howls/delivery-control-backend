@@ -14,7 +14,6 @@ export class UserData implements IUserData {
     findByCpf = async (cpf: string, deleted = false): Promise<IUser | null> => {
         try {
             const userQuery: any = {
-                attributes: ['id', 'senha'],
                 where: {
                     cpf
                 }

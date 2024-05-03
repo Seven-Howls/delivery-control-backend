@@ -9,7 +9,7 @@ import { TLoginData } from "../types/TLoginData";
 import { TSignupUserData } from "../types/TSignupUserData";
 import { CustomError } from "../utils/CustomError";
 
-export class UserBusiness {
+export class CollaboratorBusiness {
     private userData: IUserData;
     private collaboratorData: ICollaboratorData;
     private userTypePermissionsData: IUserTypePermissionsData;
@@ -34,7 +34,7 @@ export class UserBusiness {
         this.authenticator = new Authenticator();
     }
 
-    signupCollaborator = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
+    signup = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
         try {
             if(!dataUser) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 

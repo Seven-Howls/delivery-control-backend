@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { UserBusiness } from "../business/UserBusiness";
+import { CollaboratorBusiness } from "../business/CollaboratorBusiness";
 
-export class UserController {
-    private userBusiness: UserBusiness
-    constructor(userBusiness: UserBusiness) {
+export class CollaboratorController {
+    private userBusiness: CollaboratorBusiness
+    constructor(userBusiness: CollaboratorBusiness) {
         this.userBusiness = userBusiness;
     }
 
-    signupCollaborator = async (req: Request, res: Response): Promise<void> => {
+    signup = async (req: Request, res: Response): Promise<void> => {
         try {
             const token = req.headers.authorization as string;
             const {user, companyId, typeId} = req.body;
-            await this.userBusiness.signupCollaborator(user, companyId, typeId, token);
+            await this.userBusiness.signup(user, companyId, typeId, token);
             res.status(201).send({message: "Colaborador criado com sucesso"});
         } catch (error: any) {
             res.status(error.statusCode || 400).send({ error: error.message });

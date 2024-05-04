@@ -36,7 +36,7 @@ export class CollaboratorBusiness {
 
     signup = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
         try {
-            if(!dataUser) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
             if(!companyId) throw new CustomError("companyId não enviado", 422);
         

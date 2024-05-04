@@ -2,19 +2,20 @@ import { Op } from "sequelize";
 import { Motoboy, Company } from "../Definitions/index";
 import { IMotoboy, IMotoboyData } from "../models/InterfaceMotoboy";
 import { CustomError } from "../utils/CustomError";
+import { v4 as uuid4 } from "uuid";
 
 export class MotoboyData implements IMotoboyData{
-    private motoboy: any
+    private motoboy: typeof Motoboy
 
     constructor() {
         this.motoboy = Motoboy
     }
 
-    async findById(motoboyId: string): Promise<IMotoboy | null> {
+    findById = async (id: string): Promise<IMotoboy | null> =>{
         try{
             const motoboy = await this.motoboy.findOne({
                 where: {
-                    id: motoboyId,
+                    id,
                     deletedAt: {
                         [Op.is]: null
                     }
@@ -26,11 +27,11 @@ export class MotoboyData implements IMotoboyData{
         }
     }
 
-    async findMotoboyByUserId(userId: string): Promise<any>{
+    findMotoboyByUserId = async (usuarioId: string): Promise<any> => {
         try{
             const motoboy = await this.motoboy.findAll({
                 where: {
-                    usuarioId: userId,
+                    usuarioId,
                     deletedAt: {
                         [Op.is]: null
                     }
@@ -45,6 +46,38 @@ export class MotoboyData implements IMotoboyData{
             })
             return motoboy
         }catch(error: any){
+            throw new CustomError(error.message, 500);
+        }
+    }
+
+    findByUserIdAndCompany = async (usuarioId: string, empresaId: string): Promise<IMotoboy | null> => {
+        try{
+            const motoboy = await this.motoboy.findOne({
+                where: {
+                    usuarioId,
+                    empresaId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                }
+            })
+            return motoboy
+        }catch(error: any){
+            throw new CustomError(error.message, 500);
+        }
+    }
+
+    insert = async (usuarioId: string, empresaId: string): Promise<void> => {
+        try {
+            const motoboy = await this.motoboy.create({
+                id: uuid4(),
+                usuarioId,
+                empresaId,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+            await motoboy.save();
+        } catch (error: any) {
             throw new CustomError(error.message, 500);
         }
     }

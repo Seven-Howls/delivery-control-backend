@@ -1,17 +1,34 @@
+import { CollaboratorData } from "../data/CollaboratorData";
+import { ICollaboratorData } from "../models/InterfaceCollaborator";
+import { ICompanyData } from "../models/InterfaceCompany";
 import { IMotoboyData } from "../models/InterfaceMotoboy";
 import { IUserData } from "../models/interfaceUser";
+import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
+import { TSignupUserData } from "../types/TSignupUserData";
 import { CustomError } from "../utils/CustomError";
 
 export class MotoboyBusiness {
     private motoboyData: IMotoboyData;
     private userData: IUserData;
+    private companyData: ICompanyData;
+    private collaboratorData: ICollaboratorData;
+    private userTypePermissionsData: IUserTypePermissionsData;
     private authenticator: Authenticator;
 
-    constructor(motoboyData: IMotoboyData, userData: IUserData) {
+    constructor(
+        motoboyData: IMotoboyData, 
+        userData: IUserData,
+        companyData: ICompanyData,
+        collaboratorData: ICollaboratorData,
+        userTypePermissionsData: IUserTypePermissionsData
+    ) {
         this.motoboyData = motoboyData;
-        this.authenticator = new Authenticator();
         this.userData = userData;
+        this.companyData = companyData;
+        this.collaboratorData = collaboratorData;
+        this.userTypePermissionsData = userTypePermissionsData
+        this.authenticator = new Authenticator();
     }
 
     getMotoboyByUserId = async(token:string, usuarioId:string) => {
@@ -25,6 +42,49 @@ export class MotoboyBusiness {
             
             return motoboy
         }catch(error: any){
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
+
+    signup = async (token: string, companyId: string, dataUser: TSignupUserData): Promise<void> => {
+        try {
+            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            if(!companyId) throw new CustomError("companyId não enviado", 422);
+            const company = await this.companyData.findById(companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404); 
+
+            const collaboratorCreated = await this.collaboratorData.findById(isAuthorized.id);
+            if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
+            if(collaboratorCreated.empresaId !== companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
+
+            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 3)
+            if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
+
+            let user = await this.userData.findByCpf(dataUser.cpf, true);
+            if(!user){
+                user = await this.userData.insertUser(dataUser);
+            } else if(user.deletedAt){
+                const userUpdate = {
+                    id: user.id,
+                    nome: user.nome,
+                    cpf: user.cpf,
+                    celular: user.celular,
+                    deletedAt: null
+                }
+                await this.userData.updateUser(userUpdate);
+            }
+
+            const motoboy = await this.motoboyData.findByUserIdAndCompany(user?.id as string, companyId)
+            if(motoboy) throw new  CustomError("Colaborador ja existente", 409);
+            
+            await this.motoboyData.insert(user?.id as string, companyId);
+        } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }
     }

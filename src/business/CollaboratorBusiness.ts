@@ -59,7 +59,6 @@ export class CollaboratorBusiness {
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
-            console.log(user?.deletedAt)
             if(!user){
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){

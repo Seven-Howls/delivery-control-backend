@@ -18,4 +18,16 @@ export class MotoboyController{
             res.status(error.statusCode || 400).send({error: error.message})
         }
     }
+
+    signup = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token =  req.headers.authorization as string;
+            const {userData, empresaId} = req.body;
+            await this.motoboyBusiness.signup(token, empresaId, userData);
+            
+            res.status(201).send({message: "Motoboy cadastrado com sucesso"})
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({error: error.message})
+        }
+    }
 }

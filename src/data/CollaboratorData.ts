@@ -2,6 +2,8 @@ import { Op } from "sequelize";
 import { Collaborator } from "../Definitions/Colaborador";
 import { ICollaborator, ICollaboratorData } from "../models/InterfaceCollaborator";
 import { v4 as uuid4 } from "uuid";
+import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
+import { Company } from "../Definitions";
 
 export class CollaboratorData implements ICollaboratorData {
     private collaboratorData: typeof Collaborator
@@ -37,6 +39,29 @@ export class CollaboratorData implements ICollaboratorData {
             });
 
             return collaborato;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    findCollaboratorByUserId = async (userId: string): Promise< ICollaborator[] |null> =>{
+        try {
+            const collaborator = await this.collaboratorData.findAll({
+                where: {
+                    usuarioId: userId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                },
+                include: [
+                    {
+                        model: Company,
+                        as: 'collaboratorCompany'
+                    }
+                ]
+            })
+
+            return collaborator;
         } catch (error: any) {
             throw new Error(error.message);
         }

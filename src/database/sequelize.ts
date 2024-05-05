@@ -13,6 +13,10 @@ export class Database {
         define: {
             underscored: true
         },
-        logging: true
+        logging: true,
+        pool: {
+            min: 0,
+            max: 20
+        }
     })
 };

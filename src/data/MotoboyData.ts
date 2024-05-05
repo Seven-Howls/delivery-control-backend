@@ -71,8 +71,8 @@ export class MotoboyData implements IMotoboyData{
         try {
             const motoboy = await this.motoboy.create({
                 id: uuid4(),
-                usuarioId,
                 empresaId,
+                usuarioId,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })

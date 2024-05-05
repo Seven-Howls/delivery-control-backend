@@ -5,6 +5,7 @@ import { IMotoboyData } from "../models/InterfaceMotoboy";
 import { IUserData } from "../models/interfaceUser";
 import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
+import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
 import { TSignupUserData } from "../types/TSignupUserData";
 import { CustomError } from "../utils/CustomError";
 
@@ -15,6 +16,7 @@ export class MotoboyBusiness {
     private collaboratorData: ICollaboratorData;
     private userTypePermissionsData: IUserTypePermissionsData;
     private authenticator: Authenticator;
+    private passwordHandler: SecurePasswordHandler; 
 
     constructor(
         motoboyData: IMotoboyData, 
@@ -29,6 +31,7 @@ export class MotoboyBusiness {
         this.collaboratorData = collaboratorData;
         this.userTypePermissionsData = userTypePermissionsData
         this.authenticator = new Authenticator();
+        this.passwordHandler = new SecurePasswordHandler();
     }
 
     getMotoboyByUserId = async(token:string, usuarioId:string) => {
@@ -68,6 +71,7 @@ export class MotoboyBusiness {
 
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
+                dataUser.password = await this.passwordHandler.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
                 const userUpdate = {
@@ -81,7 +85,7 @@ export class MotoboyBusiness {
             }
 
             const motoboy = await this.motoboyData.findByUserIdAndCompany(user?.id as string, companyId)
-            if(motoboy) throw new  CustomError("Colaborador ja existente", 409);
+            if(motoboy) throw new  CustomError("Motoboy ja existente", 409);
             
             await this.motoboyData.insert(user?.id as string, companyId);
         } catch (error: any) {

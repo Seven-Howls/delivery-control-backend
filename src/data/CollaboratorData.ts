@@ -47,6 +47,7 @@ export class CollaboratorData implements ICollaboratorData {
     findCollaboratorByUserId = async (userId: string): Promise< ICollaborator[] |null> =>{
         try {
             const collaborator = await this.collaboratorData.findAll({
+                attributes: ['id', 'tipoId', 'empresaId', 'usuarioId'],
                 where: {
                     usuarioId: userId,
                     deletedAt: {
@@ -56,7 +57,8 @@ export class CollaboratorData implements ICollaboratorData {
                 include: [
                     {
                         model: Company,
-                        as: 'collaboratorCompany'
+                        as: 'collaboratorCompany',
+                        attributes: ['id','nomeFantasia','urlLogo']
                     }
                 ]
             })

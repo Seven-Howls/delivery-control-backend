@@ -60,6 +60,7 @@ export class CollaboratorBusiness {
            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
+                dataUser.password = await this.securePassword.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
                 const userUpdate = {

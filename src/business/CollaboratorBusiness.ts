@@ -59,8 +59,8 @@ export class CollaboratorBusiness {
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
-            console.log(user?.deletedAt)
             if(!user){
+                dataUser.password = await this.securePassword.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
                 const userUpdate = {
@@ -108,9 +108,11 @@ export class CollaboratorBusiness {
                 throw new CustomError("Senha incorreta", 401);
             }
 
+            const companysUser =  await this.collaboratorData.findCollaboratorByUserId(user.id)
+
             const token = this.authenticator.generateToken({id: user.id});
             
-            return token;
+            return [token,companysUser];
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

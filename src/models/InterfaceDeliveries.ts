@@ -2,7 +2,7 @@ import { Model } from "sequelize";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 
 interface IDeliveries {
-    id: string,
+    id?: string,
     taxaEntregaId: string,
     motoboyId: string,
     metodoPagamentoId: string,
@@ -22,7 +22,8 @@ interface IDeliveriesData{
     getDeliveryByIdAndMotoboy(id: string, motoboyId: string): Promise<IDeliveries | null>
     findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null>
     findHistoryByMotoboy(motoboyId:string): Promise<THistoryDeliveries[] | null | undefined>
-    updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >
+    updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
+    insertDelivery(delivery: IDeliveries): Promise<IDeliveries | null>
 }
 
 export {

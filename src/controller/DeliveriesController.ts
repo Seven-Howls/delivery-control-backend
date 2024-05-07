@@ -43,4 +43,16 @@ export class DeliveriesController{
             res.status(error.statusCode || 400).send({error: error.message}) 
         }
     }
+
+    createDelivery = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const {companyId, deliveryData} = req.body;
+            
+            const response = await this.deliveriesBusiness.createDelivery(token,companyId,deliveryData);
+            res.status(201).send({message: response});
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({error: error.message}) 
+        }
+    }
 }

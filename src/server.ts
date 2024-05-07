@@ -21,6 +21,7 @@ app.use('/api/v1/motoboys', motoboyRouter);
 app.use('/api/v1/payment-method', paymentRouter);
 
 const port = process.env.API_PORT || 3000;
+
 app.listen(port,() => {
     console.log(`Server init in http://localhost:${port}`);
 })

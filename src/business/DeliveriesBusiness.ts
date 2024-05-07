@@ -4,7 +4,9 @@ import { IDeliveryFee, IDeliveryFeeData } from "../models/InterfaceDeliveryFee";
 import { IMotoboyData } from "../models/InterfaceMotoboy";
 import { IPaymentMethodData } from "../models/InterfacePaymentMethod";
 import { IStatusData } from "../models/InterfaceStatus";
+import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
+import { TDeliveryCreated } from "../types/TDeliveryCreated";
 import { CustomError } from "../utils/CustomError";
 
 export class DeliveriesBusiness {
@@ -15,6 +17,7 @@ export class DeliveriesBusiness {
     private deliveryFeeData: IDeliveryFeeData;
     private paymentMethodData: IPaymentMethodData;
     private collaboratorData: ICollaboratorData;
+    private userTypePermissionsData: IUserTypePermissionsData
 
     constructor(
         deliveriesData: IDeliveriesData,
@@ -22,6 +25,7 @@ export class DeliveriesBusiness {
         statusData: IStatusData, 
         deliveryFeeData: IDeliveryFeeData, 
         paymentMethodData: IPaymentMethodData,
+        userTypePermissionsData: IUserTypePermissionsData,
         collaboratorData: ICollaboratorData
     ) {
         this.deliveriesData = deliveriesData;
@@ -30,6 +34,7 @@ export class DeliveriesBusiness {
         this.deliveryFeeData = deliveryFeeData;
         this.paymentMethodData = paymentMethodData;
         this.collaboratorData = collaboratorData;
+        this.userTypePermissionsData = userTypePermissionsData
         this.authenticator = new Authenticator();
     }
 
@@ -94,32 +99,36 @@ export class DeliveriesBusiness {
         }
     }
 
-    createDelivery = async (token: string, delivery: IDeliveries) => {
+    createDelivery = async (token: string,companyId: string, delivery: TDeliveryCreated) => {
         try{
-            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!delivery) throw new CustomError("Entrega ausente ou nula no body", 422);
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
             
             const collaborator = await this.collaboratorData.findById(isAuthorized.id);
-            if(!collaborator) throw new CustomError("Usuario criador nao encontrado", 404);
-            if(collaborator.empresaId !== delivery.companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
+            if(!collaborator) throw new CustomError("Usuario nao encontrado", 404);
+            if(collaborator.empresaId !== companyId) throw new CustomError("Usuario não pertence a esta empresa", 401);
             
-            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 7)
-
+            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaborator?.tipoId)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 1)
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             const motoboy = await this.motoboyData.findById(delivery.motoboyId);   
             if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+
             const status = await this.statusData.getStatusById(delivery.statusId);
             if(!status) throw new CustomError("Status não encontrado", 404);
-            const deliveryFee = await this.deliveryFeeData.findById(delivery.taxaEntregaId); 
+            
+            const deliveryFee = await this.deliveryFeeData.findById(delivery.deliveryFeeId); 
             if(!deliveryFee) throw new CustomError("Taxa de entrega não encontrada", 404);
-            const paymentMethod = await this.paymentMethodData.findById(delivery.metodoPagamentoId);
+
+            const paymentMethod = await this.paymentMethodData.findById(delivery.paymentMethodId);
             if(!paymentMethod) throw new CustomError("Metodo de pagamento não encontrado", 404);
 
+            const deliveryCreated = await this.deliveriesData.insertDelivery(delivery); 
 
+            return deliveryCreated;
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

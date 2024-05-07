@@ -3,9 +3,11 @@ import { Deliveries, Status } from "../Definitions/index";
 import { IDeliveries, IDeliveriesData} from "../models/InterfaceDeliveries";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
+import { v4 as uuid4 } from "uuid";
+import { TDeliveryCreated } from "../types/TDeliveryCreated";
 
 export class DeliveriesData implements IDeliveriesData {
-    private deliveries: any
+    private deliveries: typeof Deliveries
 
     constructor(){
         this.deliveries = Deliveries
@@ -80,6 +82,30 @@ export class DeliveriesData implements IDeliveriesData {
                 }
             })
         } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    insertDelivery = async (delivery: TDeliveryCreated): Promise<IDeliveries | null> =>  {
+        try{
+            const newDelivery = await this.deliveries.create({
+                id: uuid4(),
+                taxaEntregaId: delivery.deliveryFeeId,
+                motoboyId: delivery.motoboyId,
+                metodoPagamentoId: delivery.paymentMethodId,
+                statusId: delivery.statusId,
+                valorProduto: delivery.productValue,
+                taxaServico: delivery.serviceFee,
+                valorLiquido: delivery.equityValue,
+                comandaId: delivery.commandId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+
+            await newDelivery.save();
+
+            return newDelivery;
+        } catch(error: any){
             throw new Error(error.message);
         }
     }

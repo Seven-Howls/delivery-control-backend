@@ -1,27 +1,35 @@
-version: '3.7'
+version: '3.9'
 
 services:
   delivery-control:
     container_name: delivery-control
+    build: .
     image: delivery-control
     ports:
       - 3000:3000
-    volumes:
-      - ./src:/usr/src/app/src
-      - ./build:/usr/src/app/build
-      - ./package.json:/usr/src/app/package.json
-      - ./tsconfig.json:/usr/src/app/tsconfig.json
-      - ./.env:/usr/src/app/.env
-    networks:
-      - delivery-control
-    
-  mysql:
-    container_name: mysql
+    environment:
+      - DB_HOST=mysql_db
+      - DB_USER=root
+      - DB_PASSWORD=12345
+      - DB_NAME=delivery-control
+      - DB_PORT=3306
+      - DB_DIALECT=mysql
+      - API_PORT=3000
+      - BCRYPT_COST=10
+      - BCRYPT_KEY=12345
+      - JWT_KEY=12345
+      - ENVIRONMENT_PROD=false
+    depends_on:
+      - mysql_db
+    restart: always
+
+  mysql_db:
+    container_name: mysql_db
     image: mysql:8.0
     ports:
       - 3306:3306
+    volumes:
+      - /mysql_data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=12345
       - MYSQL_DATABASE=delivery-control
-    networks:
-      - delivery-control

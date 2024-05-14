@@ -20,4 +20,6 @@ export class Authenticator {
 
 export interface AuthenticationData {
   id: string;
+  companyId: string;
+  roleId?: string;
 }

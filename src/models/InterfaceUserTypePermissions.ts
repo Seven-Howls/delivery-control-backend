@@ -1,4 +1,5 @@
 import { Model } from "sequelize";
+import { TUserTypePermissions } from "../types/TUserTypePermissions";
 
 interface IUserTypePermissions {
     id: string,
@@ -12,7 +13,8 @@ interface IUserTypePermissions {
 interface UserTypePermissionsInstance extends Model<IUserTypePermissions>, IUserTypePermissions { }
 
 interface IUserTypePermissionsData {
-    findByTypeUser(typeUser: string): Promise<IUserTypePermissions[] | null>
+    findByTypeUser(typeUser: string): Promise<TUserTypePermissions[] | null>
+    findByTypeUserAndLevel(typeUser: string, level: number): Promise<TUserTypePermissions | null>
     findById(id: string): Promise<IUserTypePermissions | null>
 }
 

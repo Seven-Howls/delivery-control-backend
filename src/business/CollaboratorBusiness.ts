@@ -34,29 +34,22 @@ export class CollaboratorBusiness {
         this.authenticator = new Authenticator();
     }
 
-    signup = async (dataUser: TSignupUserData, companyId: string, typeId: string, token: string) => {
+    signup = async (dataUser: TSignupUserData, token: string) => {
         try {
-            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.typeId) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
-            if(!companyId) throw new CustomError("companyId não enviado", 422);
-        
-            const company = await this.companyData.findById(companyId);
-            if(!company) throw new CustomError("Empresa não encontrada", 404);
-
-            if(!typeId) throw new CustomError("typeId não enviado", 422);
             if(!token) throw new CustomError("Token ausente na autenticação",422);
-
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
-            
-            const collaboratorCreated = await this.collaboratorData.findById(isAuthorized.id);
-            if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
-            if(collaboratorCreated.empresaId !== companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
-            
-            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 7)
 
-            if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
+            const company = await this.companyData.findById(isAuthorized.companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404);
+
+            const collaboratorCreated = await this.collaboratorData.findByUserIdAndCompanyId(isAuthorized.id,isAuthorized.companyId);
+            if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
+            
+            const userTypePermissions = await this.userTypePermissionsData.findByTypeUserAndLevel(collaboratorCreated.tipoId,7)
+            if(!userTypePermissions) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
@@ -73,15 +66,15 @@ export class CollaboratorBusiness {
                 await this.userData.updateUser(userUpdate);
             }
 
-            const userType = await this.userTypeData.findById(typeId);
+            const userType = await this.userTypeData.findById(dataUser.typeId);
 
             if(!userType) throw new CustomError("Typo de usuario nao encontrado",404);
-            if(userType.empresaId !== companyId) throw new CustomError("Typo nao pertence a essa empresas",422);
+            if(userType.empresaId !== isAuthorized.companyId) throw new CustomError("Typo nao pertence a essa empresas",422);
 
-            const collaborator = await this.collaboratorData.findByUserIdAndCompanyId(user?.id as string,companyId)
+            const collaborator = await this.collaboratorData.findByUserIdAndCompanyId(user?.id as string,isAuthorized.companyId);
             if(collaborator) throw new  CustomError("Colaborador ja existente", 409);	
 
-            await this.collaboratorData.insertCollaborator(user?.id as string, companyId, typeId);
+            await this.collaboratorData.insertCollaborator(user?.id as string, isAuthorized.companyId, dataUser.typeId);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }
@@ -89,7 +82,7 @@ export class CollaboratorBusiness {
 
     login = async (data: TLoginData) => {
         try {
-            const { cpf, password } = data;
+            const { cpf, password, companyId } = data;
             if (!cpf || !password) {
               throw new CustomError("Campos inválidos", 422);
             }
@@ -107,12 +100,13 @@ export class CollaboratorBusiness {
             if (!passwordIsCorrect) {
                 throw new CustomError("Senha incorreta", 401);
             }
+            const collaborator =  await this.collaboratorData.findByUserIdAndCompanyId(user.id, companyId)
 
-            const companysUser =  await this.collaboratorData.findCollaboratorByUserId(user.id)
+            if(!collaborator) throw new CustomError("Colaborador não encontrado", 404);
 
-            const token = this.authenticator.generateToken({id: user.id});
+            const token = this.authenticator.generateToken({id: collaborator.usuarioId, companyId: collaborator.empresaId, roleId: collaborator.tipoId });
             
-            return [token,companysUser];
+            return [token,collaborator];
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

@@ -19,4 +19,7 @@ Company.hasMany(Collaborator, {foreignKey: 'empresaId', as: 'collaboratorCompany
 UserTypePermissions.belongsTo(Permissions, { foreignKey:'permissaoId', as: 'permissions'})
 Permissions.hasMany(UserTypePermissions, { foreignKey:'permissaoId', as: 'permissions'})
 
+Deliveries.belongsTo(Motoboy,{foreignKey: 'motoboyId', as:'motoboy'})
+Motoboy.hasMany(Deliveries, {foreignKey: 'motoboyId', as: 'motoboy'})
+
 export { Deliveries, Status, Motoboy, Company, User, Collaborator, UserTypePermissions, Permissions }

@@ -8,6 +8,7 @@ interface IUser {
     cpf: string,
     senha: string,
     celular: number,
+    email: string,
     createdAt: Date,
     updatedAt: Date,
     deletedAt: Date | null

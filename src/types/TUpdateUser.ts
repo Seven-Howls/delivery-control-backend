@@ -4,5 +4,6 @@ export type TUpdateUser = {
     cpf?: string,
     password?: string,
     celular?: number,
+    email?:string,
     deletedAt?: Date | null
 }

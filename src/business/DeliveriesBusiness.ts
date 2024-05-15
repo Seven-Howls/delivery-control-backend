@@ -131,7 +131,7 @@ export class DeliveriesBusiness {
             if(collaborator.empresaId !== companyId) throw new CustomError("Usuario não pertence a esta empresa", 401);
             
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaborator?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 1)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === '1')
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             const motoboy = await this.motoboyData.findById(delivery.motoboyId);   

@@ -1,3 +1,4 @@
+import { emit } from "process";
 import { ICollaboratorData } from "../models/InterfaceCollaborator";
 import { ICompanyData } from "../models/InterfaceCompany";
 import { IUserTypeData } from "../models/InterfaceUserType";
@@ -36,7 +37,7 @@ export class CollaboratorBusiness {
 
     signup = async (dataUser: TSignupUserData, token: string) => {
         try {
-            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.typeId) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.typeId || !dataUser.email ) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
             if(!token) throw new CustomError("Token ausente na autenticação",422);
             const isAuthorized = this.authenticator.getTokenData(token);
@@ -61,6 +62,7 @@ export class CollaboratorBusiness {
                     nome: user.nome,
                     cpf: user.cpf,
                     celular: user.celular,
+                    email: user.email,
                     deletedAt: null
                 }
                 await this.userData.updateUser(userUpdate);

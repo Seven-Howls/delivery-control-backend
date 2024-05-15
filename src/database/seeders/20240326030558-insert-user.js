@@ -11,7 +11,7 @@ module.exports = {
         const salt = await bcrypt.genSalt(rounds);
         const hash = await bcrypt.hash('12345', salt)
         // Criar 8 usuários de exemplo
-        for (let i = 1; i <= 15; i++) {
+        for (let i = 1; i <= 20; i++) {
             const cpf = `1234567890${i}`
             let resultado;
 
@@ -27,6 +27,7 @@ module.exports = {
                 cpf: resultado, 
                 senha: hash,
                 celular: Number(`7654321${i}`), 
+                email: `teste${i}@gmail.com.br`,
                 created_at: new Date(),
                 updated_at: new Date(),
                 deleted_at: i % 5 ? null : new Date()

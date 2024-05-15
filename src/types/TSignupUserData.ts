@@ -3,5 +3,6 @@ export type TSignupUserData = {
     cpf: string,
     password: string,
     celular: number,
+    email:string,
     typeId: string
 }

@@ -7,6 +7,7 @@ import { selectHistoryDeliveriesFull } from "../database/querys/selectHistoryDel
 import { v4 as uuid4 } from "uuid";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
 import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { generateUuid } from "../utils/generateUuid";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries
@@ -104,7 +105,7 @@ export class DeliveriesData implements IDeliveriesData {
     insertDelivery = async (delivery: TDeliveryCreated): Promise<IDeliveries | null> =>  {
         try{
             const newDelivery = await this.deliveries.create({
-                id: uuid4(),
+                id: generateUuid(),
                 taxaEntregaId: delivery.deliveryFeeId,
                 motoboyId: delivery.motoboyId,
                 metodoPagamentoId: delivery.paymentMethodId,

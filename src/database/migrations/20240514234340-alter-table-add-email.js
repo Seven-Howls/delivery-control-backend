@@ -9,7 +9,8 @@ module.exports = {
         await queryInterface.addColumn('usuarios','email',{
             allowNull: false,
             defaultValue: 'test@test.com',
-            type: types.STRING
+            type: types.STRING,
+            unique: true
         });
     },
     async down(queryInterface, Sequelize) {

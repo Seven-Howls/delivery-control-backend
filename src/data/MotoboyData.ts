@@ -3,6 +3,7 @@ import { Motoboy, Company } from "../Definitions/index";
 import { IMotoboy, IMotoboyData } from "../models/InterfaceMotoboy";
 import { CustomError } from "../utils/CustomError";
 import { v4 as uuid4 } from "uuid";
+import { generateUuid } from "../utils/generateUuid";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy
@@ -70,7 +71,7 @@ export class MotoboyData implements IMotoboyData{
     insert = async (usuarioId: string, empresaId: string): Promise<void> => {
         try {
             const motoboy = await this.motoboy.create({
-                id: uuid4(),
+                id: generateUuid(),
                 empresaId,
                 usuarioId,
                 createdAt: new Date(),

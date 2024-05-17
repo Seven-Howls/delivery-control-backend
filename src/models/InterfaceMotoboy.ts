@@ -1,4 +1,5 @@
 import { Model } from "sequelize";
+import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
 
 interface IMotoboy {
     id: string,
@@ -15,6 +16,7 @@ interface IMotoboyData {
     findById(id: string): Promise<IMotoboy | null>
     findMotoboyByUserId(usuarioId: string): Promise<any>
     findByUserIdAndCompany(usuarioId: string, empresaId: string): Promise<IMotoboy | null>
+    findPersonalDataOfMotoboy(motoboyId: string): Promise< TPersonalDataOfMotoboy | null >
     insert(usuarioId: string, empresaId: string): Promise<void>
 }
 

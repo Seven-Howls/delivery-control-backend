@@ -1,9 +1,10 @@
-import { Op } from "sequelize";
+import { Op, QueryTypes } from "sequelize";
 import { Motoboy, Company } from "../Definitions/index";
 import { IMotoboy, IMotoboyData } from "../models/InterfaceMotoboy";
 import { CustomError } from "../utils/CustomError";
 import { v4 as uuid4 } from "uuid";
 import { generateUuid } from "../utils/generateUuid";
+import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy
@@ -64,6 +65,25 @@ export class MotoboyData implements IMotoboyData{
             })
             return motoboy
         }catch(error: any){
+            throw new CustomError(error.message, 500);
+        }
+    }
+
+    findPersonalDataOfMotoboy = async (motoboyId:string): Promise<TPersonalDataOfMotoboy> => {
+        try{
+            const motoboy = await this.motoboy.sequelize?.query(
+                `
+                    select * from motoboys m 
+                    inner join usuarios u on m.usuario_id = u.id 
+                    where m.usuario_id = :motoboyId
+                `,
+                {
+                    type: QueryTypes.SELECT,
+                    replacements: { motoboyId }
+                }
+            )
+            return motoboy as unknown as TPersonalDataOfMotoboy
+        }catch (error: any){
             throw new CustomError(error.message, 500);
         }
     }

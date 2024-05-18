@@ -10,7 +10,7 @@ export const DeliveryFee = database.sequelize.define<DeliveryFeeInstance, IDeliv
         type: DataTypes.STRING,
         allowNull: false
     },
-    empresaId: {
+    empresa_id: {
         allowNull: false,
         type: DataTypes.STRING,
         references:{

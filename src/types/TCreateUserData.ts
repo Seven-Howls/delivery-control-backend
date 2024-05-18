@@ -1,4 +1,4 @@
-export type TSignupUserData = {
+export type TCreateUserData = {
     nome: string,
     cpf: string,
     password: string,

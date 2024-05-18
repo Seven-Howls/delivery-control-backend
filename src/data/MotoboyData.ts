@@ -5,6 +5,7 @@ import { CustomError } from "../utils/CustomError";
 import { v4 as uuid4 } from "uuid";
 import { generateUuid } from "../utils/generateUuid";
 import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
+import { TMotoboyOfCompany } from "../types/TMotoboyOfCompany";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy
@@ -29,7 +30,7 @@ export class MotoboyData implements IMotoboyData{
         }
     }
 
-    findMotoboyByUserId = async (usuarioId: string): Promise<any> => {
+    findMotoboyByUserId = async (usuarioId: string): Promise<TMotoboyOfCompany[]> => {
         try{
             const motoboy = await this.motoboy.findAll({
                 where: {
@@ -46,7 +47,7 @@ export class MotoboyData implements IMotoboyData{
                     }
                 ]
             })
-            return motoboy
+            return motoboy as unknown as TMotoboyOfCompany[]
         }catch(error: any){
             throw new CustomError(error.message, 500);
         }

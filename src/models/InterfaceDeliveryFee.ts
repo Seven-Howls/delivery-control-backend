@@ -1,5 +1,6 @@
 import { Model } from "sequelize";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
+import { TUpdateDeliveryFee } from "../types/TUpdateDeliveryFee";
 
 interface IDeliveryFee {
     id: string;
@@ -21,5 +22,6 @@ interface IDeliveryFeeData {
         valor: number,
         empresa_id: string
     ): Promise<void>;
+    updateUser(data: TUpdateDeliveryFee): Promise<void>
 }
 export { IDeliveryFee, DeliveryFeeInstance, IDeliveryFeeData };

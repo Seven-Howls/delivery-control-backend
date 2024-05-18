@@ -7,7 +7,7 @@ import { IUserData } from "../models/interfaceUser";
 import { Authenticator } from "../services/Authenticator";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
 import { TLoginData } from "../types/TLoginData";
-import { TSignupUserData } from "../types/TSignupUserData";
+import { TCreateUserData } from "../types/TCreateUserData";
 import { CustomError } from "../utils/CustomError";
 
 export class CollaboratorBusiness {
@@ -36,7 +36,7 @@ export class CollaboratorBusiness {
     }
     
 
-    signup = async (dataUser: TSignupUserData, token: string) => {
+    signup = async (dataUser: TCreateUserData, token: string) => {
         try {
             if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.typeId || !dataUser.email ) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 

@@ -5,7 +5,7 @@ import { IUserData } from "../models/interfaceUser";
 import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
-import { TSignupUserData } from "../types/TSignupUserData";
+import { TCreateUserData } from "../types/TCreateUserData";
 import { CustomError } from "../utils/CustomError";
 import { TMotoboyOfCompany } from "../types/TMotoboyOfCompany";
 
@@ -49,7 +49,7 @@ export class MotoboyBusiness {
         }
     }
 
-    signup = async (token: string, companyId: string, dataUser: TSignupUserData): Promise<void> => {
+    signup = async (token: string, companyId: string, dataUser: TCreateUserData): Promise<void> => {
         try {
             if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.email) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 

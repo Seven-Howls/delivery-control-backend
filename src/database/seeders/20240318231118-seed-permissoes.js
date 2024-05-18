@@ -12,7 +12,8 @@ module.exports = {
             {id: 5, nome: "Criar motoboy", nivel: 5, created_at: new Date(),updated_at: new Date()},
             {id: 6, nome: "Excluir entrega", nivel: 6, created_at: new Date(),updated_at: new Date()},
             {id: 7, nome: "Cadastrar colaborado", nivel: 7, created_at: new Date(),updated_at: new Date()},
-            {id: 8, nome: "Excluir colaborado", nivel: 8, created_at: new Date(),updated_at: new Date()}
+            {id: 8, nome: "Excluir colaborado", nivel: 8, created_at: new Date(),updated_at: new Date()},
+            {id: 9, nome: "Editar usuario", nivel: 9, created_at: new Date(),updated_at: new Date()}
         ]
     )},
     async down(queryInterface, Sequelize) {

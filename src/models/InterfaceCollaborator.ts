@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import { TSignupUserData } from "../types/TSignupUserData";
+import { TCreateUserData } from "../types/TCreateUserData";
 import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
 
 interface ICollaborator {

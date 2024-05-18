@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -13,12 +14,16 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors());
-app.get('/');
-
+app.get('/',(req: Request, res: Response)=> {
+    res.status(200).send("Api rodando!")
+});
 app.use('/api/v1/collaborator',collaboratorRouter);
 app.use('/api/v1/deliveries',deliveriesRouter);
 app.use('/api/v1/motoboys', motoboyRouter);
 app.use('/api/v1/payment-method', paymentRouter);
+app.use('/api/v1/user', (req: Request, res: Response)=> {
+    res.status(200).send("Em breve")
+})
 
 const port = process.env.API_PORT || 3000;
 

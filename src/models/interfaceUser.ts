@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import { TSignupUserData } from "../types/TSignupUserData";
+import { TCreateUserData } from "../types/TCreateUserData";
 import { TUpdateUser } from "../types/TUpdateUser";
 
 interface IUser {
@@ -19,7 +19,7 @@ interface UserInstance extends Model<IUser>, IUser { }
 interface IUserData{
     findByCpf(cpf: string, deleted: boolean): Promise<IUser | null>
     findById(id: string): Promise<IUser | null>
-    insertUser(data: TSignupUserData): Promise<IUser | null>
+    insertUser(data: TCreateUserData): Promise<IUser | null>
     updateUser(data: TUpdateUser): Promise<void>
 }
 

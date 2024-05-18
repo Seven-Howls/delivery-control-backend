@@ -19,6 +19,7 @@ interface ICollaboratorData {
     findByUserIdAndCompanyId(userId: string, companyId: string): Promise<ICollaborator | null >
     findCollaboratorByUserId(userId: string): Promise< ICollaborator[] | null >
     insertCollaborator(userId: string, companyId: string, typeId: string): Promise<ICollaborator | null>
+    findCollaboratorsByCompanyId(companyId: string): Promise<ICollaborator[] | null>
 }
 
 export {

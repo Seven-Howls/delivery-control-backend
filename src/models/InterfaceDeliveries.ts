@@ -2,6 +2,7 @@ import { Model } from "sequelize";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
 import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
 
 interface IDeliveries {
     id?: string,
@@ -27,6 +28,7 @@ interface IDeliveriesData{
     updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
     insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>,
     findHistoryByMotoboyFUll(motoboyId:string): Promise<THistoryDeliveriesFull[] | null>
+    updateDataDeliveryById(deliveryId: string, data : TDataUpdateDeliveries): Promise< void |null>
 }
 
 export {

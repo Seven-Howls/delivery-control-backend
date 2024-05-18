@@ -14,6 +14,7 @@ interface DeliveryFeeInstance extends Model<IDeliveryFee>, IDeliveryFee { }
 
 interface IDeliveryFeeData {
     findById(id: string): Promise<IDeliveryFee | null>
+    findByIdAndCompany(id: string, empresaId:string): Promise<IDeliveryFee | null>
 }
 export {
     IDeliveryFee,

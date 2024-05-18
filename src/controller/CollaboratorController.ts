@@ -27,4 +27,21 @@ export class CollaboratorController {
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     };
+    FindAllColaborators = async (req: Request, res: Response): Promise<void> => {
+        try {
+            
+            const token = req.headers.authorization as string;
+           
+            
+            console.log(token)
+            if (!token ) {
+                throw new Error("Token ou Company ID ausente");
+            }
+
+            const collaborators = await this.collaboratorBusiness.findAllCollaborators(token);
+            res.status(200).json({ collaborators });
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    };
 }

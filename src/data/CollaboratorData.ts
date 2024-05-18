@@ -86,4 +86,27 @@ export class CollaboratorData implements ICollaboratorData {
             throw new Error(error.message);
         }
     }
+    findCollaboratorsByCompanyId = async (companyId: string): Promise<ICollaborator[] | null> => {
+        try {
+            const collaborators = await this.collaboratorData.findAll({
+                where: {
+                    empresaId: companyId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                },
+                include: [
+                    {
+                        model: Company,
+                        as: 'collaboratorCompany',
+                        attributes: ['id', 'nomeFantasia', 'urlLogo']
+                    }
+                ]
+            });
+
+            return collaborators;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
 }

@@ -94,14 +94,7 @@ export class CollaboratorData implements ICollaboratorData {
                     deletedAt: {
                         [Op.is]: null
                     }
-                },
-                include: [
-                    {
-                        model: Company,
-                        as: 'collaboratorCompany',
-                        attributes: ['id', 'nomeFantasia', 'urlLogo']
-                    }
-                ]
+                }
             });
 
             return collaborators;

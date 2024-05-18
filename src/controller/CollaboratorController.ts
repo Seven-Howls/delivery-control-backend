@@ -29,11 +29,8 @@ export class CollaboratorController {
     };
     FindAllColaborators = async (req: Request, res: Response): Promise<void> => {
         try {
-            
             const token = req.headers.authorization as string;
-           
             
-            console.log(token)
             if (!token ) {
                 throw new Error("Token ou Company ID ausente");
             }

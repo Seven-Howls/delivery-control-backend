@@ -14,4 +14,4 @@ const collaboradorController = new CollaboratorController(collaboradorBusiness);
 
 collaboratorRouter.post("/signup", collaboradorController.signup);
 collaboratorRouter.post("/login", collaboradorController.login);
-collaboratorRouter.get("/find", collaboradorController.FindAllColaborators);
+collaboratorRouter.get("/findall", collaboradorController.FindAllColaborators);

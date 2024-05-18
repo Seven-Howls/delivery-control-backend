@@ -41,6 +41,7 @@ export class UserBusiness {
             if(!user) throw new CustomError("Usuario nao encontrado não encontrado", 404);
 
             const userUpdate = {
+                id: id,
                 nome: data.nome,
                 cpf: data.cpf,
                 celular: data.celular,

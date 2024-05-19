@@ -19,6 +19,16 @@ export class MotoboyController{
         }
     }
 
+    getAllMotoboys = async (req: Request, res: Response) => {
+        try{
+            const token = req.headers.authorization as string;
+            const motoboy = await this.motoboyBusiness.getAllMotoboys(token);
+            res.status(200).json(motoboy).send();
+        }catch(error: CustomError | any){
+            res.status(error.statusCode || 400).send({error: error.message})
+        }  
+    }
+
     signup = async (req: Request, res: Response): Promise<void> => {
         try {
             const token =  req.headers.authorization as string;

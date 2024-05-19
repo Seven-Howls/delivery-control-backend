@@ -49,6 +49,19 @@ export class MotoboyBusiness {
         }
     }
 
+    getAllMotoboys = async (token: string) => {
+        try{
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const motoboys = await this.motoboyData.findAllByCompanyId(isAuthorized.companyId);
+            return motoboys;
+        } catch(error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
+
     signup = async (token: string, companyId: string, dataUser: TCreateUserData): Promise<void> => {
         try {
             if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.email) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);

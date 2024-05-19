@@ -8,6 +8,7 @@ import { motoboyRouter } from './router/motoboyRouter';
 import { paymentRouter } from './router/paymentMethod';
 import { deliveriesFeeRouter } from './router/deliveriesFeeRouter';
 import { userRouter } from './router/userRouter';
+import { companyRouter } from './router/companyRouter';
 
 dotenv.config();
 
@@ -25,9 +26,7 @@ app.use('/api/v1/motoboys', motoboyRouter);
 app.use('/api/v1/payment-method', paymentRouter);
 app.use('/api/v1/deliveries-fee', deliveriesFeeRouter);
 app.use('/api/v1/user', userRouter)
-app.use('/api/v1/companies', (req: Request,res: Response) => {
-    res.send('Em breve')
-})
+app.use('/api/v1/companies', companyRouter)
 
 const port = process.env.API_PORT || 3000;
 

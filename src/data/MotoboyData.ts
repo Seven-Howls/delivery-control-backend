@@ -51,6 +51,28 @@ export class MotoboyData implements IMotoboyData{
             throw new CustomError(error.message, 500);
         }
     }
+    findAllMotoboyByCompanyId = async (empresaId: string): Promise<any> => {
+        try{
+            const motoboy = await this.motoboy.findAll({
+                where: {
+                    empresaId,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                },
+                include:[
+                    {
+                        model: Company,
+                        as: 'motoboyCompany',
+                        attributes: ['id','nome_fantasia']
+                    }
+                ]
+            })
+            return motoboy
+        }catch(error: any){
+            throw new CustomError(error.message, 500);
+        }
+    }
 
     findByUserIdAndCompany = async (usuarioId: string, empresaId: string): Promise<IMotoboy | null> => {
         try{

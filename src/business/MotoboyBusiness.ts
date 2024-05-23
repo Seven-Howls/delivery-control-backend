@@ -49,6 +49,18 @@ export class MotoboyBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
+    getAllMotoboysByCompanyId = async(token:string) => {
+        try{
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const motoboy = await this.motoboyData.findAllMotoboyByCompanyId(isAuthorized.companyId);
+            if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+            
+            return motoboy
+        }catch(error: any){
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
 
     signup = async (token: string, companyId: string, dataUser: TSignupUserData): Promise<void> => {
         try {

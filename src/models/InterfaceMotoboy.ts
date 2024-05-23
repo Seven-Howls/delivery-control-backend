@@ -18,6 +18,7 @@ interface IMotoboyData {
     findByUserIdAndCompany(usuarioId: string, empresaId: string): Promise<IMotoboy | null>
     findPersonalDataOfMotoboy(motoboyId: string): Promise< TPersonalDataOfMotoboy | null >
     insert(usuarioId: string, empresaId: string): Promise<void>
+    findAllMotoboyByCompanyId(company_id: string): Promise<IMotoboy | null>
 }
 
 export {

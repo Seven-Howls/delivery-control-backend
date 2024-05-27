@@ -50,4 +50,17 @@ export class MotoboyController{
             res.status(error.statusCode || 400).send({error: error.message})
         }
     }
+    updateMotoboy = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const data = req.body;
+            await this.motoboyBusiness.updateMotoboy(token, data);
+            res.status(200).send({ message: "Dados do motoboy atualizados com sucesso" });
+        } catch (error: CustomError | any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
 }
+    
+    
+

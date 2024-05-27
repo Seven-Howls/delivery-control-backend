@@ -141,4 +141,37 @@ export class MotoboyBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
+    updateMotoboy = async (token: string, data: any): Promise<void> => {
+        try {
+            if (!token) throw new CustomError("Token ausente na autenticação", 422);
+    
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+    
+            const motoboyId = isAuthorized.id;
+            const motoboy = await this.motoboyData.findById(motoboyId);
+            if (!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+    
+            const usuarioId = motoboy.usuarioId;
+    
+            const userUpdateData: any = { id: usuarioId, deletedAt: null };
+            
+            if (data.nome) userUpdateData.nome = data.nome;
+            if (data.cpf) userUpdateData.cpf = data.cpf;
+            if (data.celular) userUpdateData.celular = data.celular;
+            if (data.email) userUpdateData.email = data.email;
+    
+            if (Object.keys(userUpdateData).length > 2) { 
+                await this.userData.updateUser(userUpdateData);
+            } else {
+                throw new CustomError("Nenhum campo para atualizar", 400);
+            }
+        } catch (error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
 }
+
+    
+    
+    

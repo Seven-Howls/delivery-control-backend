@@ -18,5 +18,6 @@ motoboyRouter.get("/all-motoboys", motoboyController.getAllMotoboysByCompanyId)
 motoboyRouter.get("/find-all", motoboyController.getAllMotoboys);
 motoboyRouter.post('/signup', motoboyController.signup)
 motoboyRouter.post(`/login`, motoboyController.login);
+motoboyRouter.put(`/update`, motoboyController.updateMotoboy);
 
 

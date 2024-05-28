@@ -23,5 +23,12 @@ interface IDeliveryFeeData {
         empresa_id: string
     ): Promise<void>;
     updateUser(data: TUpdateDeliveryFee): Promise<void>
+    findById(id: string): Promise<IDeliveryFee | null>
+    findByIdAndCompany(id: string, empresaId:string): Promise<IDeliveryFee | null>
+}
+export {
+    IDeliveryFee,
+    DeliveryFeeInstance,
+    IDeliveryFeeData
 }
 export { IDeliveryFee, DeliveryFeeInstance, IDeliveryFeeData };

@@ -8,6 +8,7 @@ import { v4 as uuid4 } from "uuid";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
 import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
 import { generateUuid } from "../utils/generateUuid";
+import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries
@@ -122,6 +123,26 @@ export class DeliveriesData implements IDeliveriesData {
 
             return newDelivery;
         } catch(error: any){
+            throw new Error(error.message);
+        }
+    }
+    updateDataDeliveryById = async (deliveryId: string, data:TDataUpdateDeliveries): Promise< void > => {
+        try {
+            this.deliveries.update({
+                taxaEntregaId:data.deliveryFeeId,
+                motoboyId:data.motoboyId,
+                metodoPagamentoId:data.methodPaymentId,
+                statusId:data.statusId,
+                taxaServico:data.serviceValue,
+                valorProduto:data.productValue,
+                valorLiquido:(data.serviceValue + data.productValue),
+                comandaId:data.comandId
+            } ,{
+                where: {
+                    id: deliveryId 
+                }
+            })
+        } catch (error: any) {
             throw new Error(error.message);
         }
     }

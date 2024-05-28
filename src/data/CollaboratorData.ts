@@ -1,9 +1,9 @@
 import { Op } from "sequelize";
 import { Collaborator } from "../Definitions/Colaborador";
 import { ICollaborator, ICollaboratorData } from "../models/InterfaceCollaborator";
-import { v4 as uuid4 } from "uuid";
 import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
 import { Company } from "../Definitions";
+import { generateUuid } from "../utils/generateUuid";
 
 export class CollaboratorData implements ICollaboratorData {
     private collaboratorData: typeof Collaborator
@@ -72,7 +72,7 @@ export class CollaboratorData implements ICollaboratorData {
     insertCollaborator = async (userId: string, companyId: string, typeId: string): Promise<ICollaborator | null> => {
         try {
             const collaborator = await this.collaboratorData.create({
-                id: uuid4(),
+                id: generateUuid(),
                 tipoId: typeId,
                 empresaId: companyId,
                 usuarioId: userId,

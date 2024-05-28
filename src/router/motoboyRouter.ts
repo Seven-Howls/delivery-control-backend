@@ -14,6 +14,7 @@ const motoboyBusiness = new MotoboyBusiness(new MotoboyData(), new UserData(), n
 const motoboyController = new MotoboyController(motoboyBusiness);
 
 motoboyRouter.get("/", motoboyController.getMotoboyByUserId);
-motoboyRouter.post('/signup', motoboyController.signup)
+motoboyRouter.get("/all-motoboys", motoboyController.getAllMotoboysByCompanyId)
+motoboyRouter.post('/signup', motoboyController.signup);
 
 

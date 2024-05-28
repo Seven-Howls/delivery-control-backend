@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 import { CollaboratorData } from "../data/CollaboratorData";
 import { ICollaboratorData } from "../models/InterfaceCollaborator";
 import { ICompanyData } from "../models/InterfaceCompany";
@@ -48,10 +49,22 @@ export class MotoboyBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
+    getAllMotoboysByCompanyId = async(token:string) => {
+        try{
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const motoboy = await this.motoboyData.findAllMotoboyByCompanyId(isAuthorized.companyId);
+            if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+            
+            return motoboy
+        }catch(error: any){
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
 
     signup = async (token: string, companyId: string, dataUser: TSignupUserData): Promise<void> => {
         try {
-            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
+            if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.email) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
             if(!token) throw new CustomError("Token ausente na autenticação",422);
             const isAuthorized = this.authenticator.getTokenData(token);
@@ -66,7 +79,7 @@ export class MotoboyBusiness {
             if(collaboratorCreated.empresaId !== companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
 
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 3)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === '3')
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             let user = await this.userData.findByCpf(dataUser.cpf, true);
@@ -79,6 +92,7 @@ export class MotoboyBusiness {
                     nome: user.nome,
                     cpf: user.cpf,
                     celular: user.celular,
+                    email: user.email,
                     deletedAt: null
                 }
                 await this.userData.updateUser(userUpdate);

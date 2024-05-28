@@ -3,8 +3,11 @@ import { Deliveries, Status } from "../Definitions/index";
 import { IDeliveries, IDeliveriesData} from "../models/InterfaceDeliveries";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
+import { selectHistoryDeliveriesFull } from "../database/querys/selectHistoryDeliveriesFull";
 import { v4 as uuid4 } from "uuid";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
+import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { generateUuid } from "../utils/generateUuid";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries
@@ -29,6 +32,7 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     }
+    
     findStatusInProgressByMotoboy = async (motoboyId: string): Promise<IDeliveries[] | null> => {
         try{
             const inProgressDeliveries =  await this.deliveries.findAll({
@@ -71,7 +75,20 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     }
-
+    findHistoryByMotoboyFUll = async (motoboyId: string): Promise<THistoryDeliveriesFull[] | null> => {
+        try {
+            const history: THistoryDeliveriesFull[] = await this.deliveries.sequelize?.query(
+                selectHistoryDeliveriesFull,
+                {
+                    type: QueryTypes.SELECT,
+                    replacements: {motoboyId}
+                }
+            ) as THistoryDeliveriesFull[];
+            return history
+        } catch(err: any) {
+            throw new Error(err.message)
+        }
+    }
     updateStatusDeliveryById = async (deliveryId: string, statusId: string): Promise< void > => {
         try {
             this.deliveries.update({
@@ -85,11 +102,10 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     }
-
     insertDelivery = async (delivery: TDeliveryCreated): Promise<IDeliveries | null> =>  {
         try{
             const newDelivery = await this.deliveries.create({
-                id: uuid4(),
+                id: generateUuid(),
                 taxaEntregaId: delivery.deliveryFeeId,
                 motoboyId: delivery.motoboyId,
                 metodoPagamentoId: delivery.paymentMethodId,

@@ -1,6 +1,7 @@
 import { Model } from "sequelize";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
+import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
 
 interface IDeliveries {
     id?: string,
@@ -20,11 +21,12 @@ interface IDeliveries {
 interface DeliveriesInstance extends Model<IDeliveries>, IDeliveries { }
 
 interface IDeliveriesData{
-    getDeliveryByIdAndMotoboy(id: string, motoboyId: string): Promise<IDeliveries | null>
-    findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null>
-    findHistoryByMotoboy(motoboyId:string): Promise<THistoryDeliveries[] | null | undefined>
+    getDeliveryByIdAndMotoboy(id: string, motoboyId: string): Promise<IDeliveries | null>,
+    findStatusInProgressByMotoboy(motoboyId: string): Promise<IDeliveries[] | null>,
+    findHistoryByMotoboy(motoboyId:string): Promise<THistoryDeliveries[] | null | undefined>,
     updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
-    insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>
+    insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>,
+    findHistoryByMotoboyFUll(motoboyId:string): Promise<THistoryDeliveriesFull[] | null>
 }
 
 export {

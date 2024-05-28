@@ -75,6 +75,26 @@ export class DeliveriesBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
+
+    getHistoryDeliveriesByMotoboyFull = async (token:string, motoboyId:string) => {
+        try {
+            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);
+
+            //const isAuthorized = this.authenticator.getTokenData(token);
+            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const motoboy = await this.motoboyData.findById(motoboyId);
+            if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+            const deliveries = await this.deliveriesData.findHistoryByMotoboyFUll(motoboyId)
+
+            return deliveries
+
+        }catch(err: any) {
+            throw new CustomError(err.message, err.statusCode)
+        }
+    }
+
     updateDeliveryStatusById = async (token: string, deliveryId:string, motoboyId: string, statusId: string)  => {
         try{
             //if(!token) throw new CustomError("Token ausente na autenticação",422);
@@ -111,7 +131,7 @@ export class DeliveriesBusiness {
             if(collaborator.empresaId !== companyId) throw new CustomError("Usuario não pertence a esta empresa", 401);
             
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaborator?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === 1)
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === '1')
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             const motoboy = await this.motoboyData.findById(delivery.motoboyId);   

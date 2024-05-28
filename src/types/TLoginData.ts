@@ -1,4 +1,5 @@
 export type TLoginData = {
     cpf: string,
-    password: string
+    password: string,
+    companyId: string
 }

@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 import { TSignupUserData } from "../types/TSignupUserData";
 import { v4 as uuid4 } from "uuid";
 import { TUpdateUser } from "../types/TUpdateUser";
+import { generateUuid } from "../utils/generateUuid";
 
 export class UserData implements IUserData {
     private user: typeof User
@@ -49,11 +50,12 @@ export class UserData implements IUserData {
     insertUser = async (data: TSignupUserData): Promise<IUser | null> => {
         try {
             const user = await this.user.create({
-                id: uuid4(),
+                id: generateUuid(),
                 celular: data.celular,
                 cpf: data.cpf,
                 nome: data.nome,
                 senha: data.password,
+                email: data.email,
                 createdAt: new Date(),
                 updatedAt: new Date()
             })

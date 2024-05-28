@@ -4,6 +4,8 @@ import { User } from "./User";
 import { Company } from "./Company";
 import { Status } from "./Status";
 import { Collaborator } from "./Colaborador";
+import { UserTypePermissions } from "./UserTypePermissions";
+import { Permissions } from "./Permissions";
 
 Deliveries.belongsTo(Status, { foreignKey: 'statusId' , as: 'deliveriesStatus'})
 Status.hasMany(Deliveries,{foreignKey: 'statusId', as: 'deliveriesStatus'})
@@ -14,5 +16,10 @@ Company.hasMany(Motoboy,{foreignKey:'empresaId', as: 'motoboyCompany'})
 Collaborator.belongsTo(Company, {foreignKey: 'empresaId', as: 'collaboratorCompany'})
 Company.hasMany(Collaborator, {foreignKey: 'empresaId', as: 'collaboratorCompany'})
 
+UserTypePermissions.belongsTo(Permissions, { foreignKey:'permissaoId', as: 'permissions'})
+Permissions.hasMany(UserTypePermissions, { foreignKey:'permissaoId', as: 'permissions'})
 
-export { Deliveries, Status, Motoboy, Company, User, Collaborator}
+Deliveries.belongsTo(Motoboy,{foreignKey: 'motoboyId', as:'motoboy'})
+Motoboy.hasMany(Deliveries, {foreignKey: 'motoboyId', as: 'motoboy'})
+
+export { Deliveries, Status, Motoboy, Company, User, Collaborator, UserTypePermissions, Permissions }

@@ -24,5 +24,6 @@ const deliveriesController = new DeliveriesController(deliveriesBusiness);
 
 deliveriesRouter.get("/in-progress/:motoboyId", deliveriesController.getDeliveriessInProgressByMotoBoy);
 deliveriesRouter.get("/history/:motoboyId", deliveriesController.getHistoryDeliveriesByMotoboy);
+deliveriesRouter.get("/history-manager/:motoboyId", deliveriesController.getHistoryDeliveiresByMotoboyFull)
 deliveriesRouter.put("/:id", deliveriesController.updateDeliveryStatusById);
 deliveriesRouter.post("/create", deliveriesController.createDelivery);

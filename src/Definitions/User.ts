@@ -19,6 +19,11 @@ export const User = database.sequelize.define<UserInstance, IUser>('Usuario',{
         unique: true,
         allowNull: false
     },
+    email: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: true
+    },
     senha: {
         allowNull: false,
         type: DataTypes.STRING

@@ -7,6 +7,7 @@ import { IStatusData } from "../models/InterfaceStatus";
 import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
+import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
 import { CustomError } from "../utils/CustomError";
 
 export class DeliveriesBusiness {
@@ -150,6 +151,33 @@ export class DeliveriesBusiness {
 
             return deliveryCreated;
         } catch (error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
+    updateDataDeliveryById = async (token: string, deliveryId:string, data: TDataUpdateDeliveries)  => {
+        try{
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            if(!deliveryId) throw new CustomError("deliveryId ausente ou nulo na Path Variables ", 422);
+            const delivery = await this.deliveriesData.getDeliveryByIdAndMotoboy(deliveryId, data.motoboyId);
+            if(!delivery) throw new CustomError("Entrega não encontrada", 404);
+            if(data.motoboyId){
+                const motoboy = await this.motoboyData.findById(data.motoboyId);   
+                if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+            }else if(data.statusId){
+                const status = await this.statusData.getStatusById(data.statusId);
+                if(!status) throw new CustomError("Status não encontrado", 404);
+            }else if(data.deliveryFeeId){
+                const deliveryFee = await this.deliveryFeeData.findByIdAndCompany(data.deliveryFeeId, isAuthorized.companyId); 
+                if(!deliveryFee) throw new CustomError("Taxa de entrega não encontrada", 404);
+            }else if(data.methodPaymentId){
+                const paymentMethod = await this.paymentMethodData.findById(data.methodPaymentId);
+                if(!paymentMethod) throw new CustomError("Metodo de pagamento não encontrado", 404);
+            }
+            await this.deliveriesData.updateDataDeliveryById(deliveryId, data);
+            return "Entrega atualizada com sucesso"
+        }catch(error: any){
             throw new CustomError(error.message, error.statusCode);
         }
     }

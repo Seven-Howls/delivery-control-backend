@@ -27,3 +27,4 @@ deliveriesRouter.get("/history/:motoboyId", deliveriesController.getHistoryDeliv
 deliveriesRouter.get("/history-manager/:motoboyId", deliveriesController.getHistoryDeliveiresByMotoboyFull)
 deliveriesRouter.put("/:id", deliveriesController.updateDeliveryStatusById);
 deliveriesRouter.post("/create", deliveriesController.createDelivery);
+deliveriesRouter.put("/update-deliver/:id", deliveriesController.updateDeliveryDataById);

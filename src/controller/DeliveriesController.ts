@@ -71,4 +71,17 @@ export class DeliveriesController{
             res.status(error.statusCode || 400).send({error: error.message}) 
         }
     }
+    updateDeliveryDataById = async (req: Request, res: Response):Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const {deliveryFeeId, motoboyId, methodPaymentId, statusId, productValue, comandId, serviceValue} = req.body;
+
+            const deliveryId = req.params.id
+            const response = await this.deliveriesBusiness.updateDataDeliveryById(token, deliveryId, {deliveryFeeId, motoboyId, methodPaymentId, statusId, productValue, comandId, serviceValue});
+            
+            res.status(200).send({message: response});
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({error: error.message}) 
+        }
+    }
 }

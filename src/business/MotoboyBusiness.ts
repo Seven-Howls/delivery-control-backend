@@ -1,5 +1,3 @@
-import { stringify } from "querystring";
-import { CollaboratorData } from "../data/CollaboratorData";
 import { ICollaboratorData } from "../models/InterfaceCollaborator";
 import { ICompanyData } from "../models/InterfaceCompany";
 import { IMotoboyData } from "../models/InterfaceMotoboy";
@@ -7,8 +5,9 @@ import { IUserData } from "../models/interfaceUser";
 import { IUserTypePermissionsData } from "../models/InterfaceUserTypePermissions";
 import { Authenticator } from "../services/Authenticator";
 import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
-import { TSignupUserData } from "../types/TSignupUserData";
+import { TCreateUserData } from "../types/TCreateUserData";
 import { CustomError } from "../utils/CustomError";
+import { TMotoboyOfCompany } from "../types/TMotoboyOfCompany";
 
 export class MotoboyBusiness {
     private motoboyData: IMotoboyData;
@@ -17,7 +16,7 @@ export class MotoboyBusiness {
     private collaboratorData: ICollaboratorData;
     private userTypePermissionsData: IUserTypePermissionsData;
     private authenticator: Authenticator;
-    private passwordHandler: SecurePasswordHandler; 
+    private securePassword: SecurePasswordHandler; 
 
     constructor(
         motoboyData: IMotoboyData, 
@@ -32,7 +31,7 @@ export class MotoboyBusiness {
         this.collaboratorData = collaboratorData;
         this.userTypePermissionsData = userTypePermissionsData
         this.authenticator = new Authenticator();
-        this.passwordHandler = new SecurePasswordHandler();
+        this.securePassword = new SecurePasswordHandler();
     }
 
     getMotoboyByUserId = async(token:string, usuarioId:string) => {
@@ -62,7 +61,20 @@ export class MotoboyBusiness {
         }
     }
 
-    signup = async (token: string, companyId: string, dataUser: TSignupUserData): Promise<void> => {
+    getAllMotoboys = async (token: string) => {
+        try{
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const motoboys = await this.motoboyData.findAllByCompanyId(isAuthorized.companyId);
+            return motoboys;
+        } catch(error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
+
+    signup = async (token: string, companyId: string, dataUser: TCreateUserData): Promise<void> => {
         try {
             if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.email) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
@@ -84,7 +96,7 @@ export class MotoboyBusiness {
 
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
-                dataUser.password = await this.passwordHandler.hash(dataUser.password);
+                dataUser.password = await this.securePassword.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
                 const userUpdate = {
@@ -103,6 +115,41 @@ export class MotoboyBusiness {
             
             await this.motoboyData.insert(user?.id as string, companyId);
         } catch (error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
+
+    login = async (cpf:string, password:string): Promise<TMotoboyOfCompany[] | null > => {
+        try {
+            if(!cpf || !password ) throw new CustomError(`Parametros obrigatorios do usuario não enviados`,422)
+
+            const user = await this.userData.findByCpf(cpf,false);
+            if (!user) {
+                throw new CustomError("Usuário não encontrado", 404);
+            }
+            
+            const passwordIsCorrect = await this.securePassword.compare(
+                password,
+                user.senha
+            );
+
+            if (!passwordIsCorrect) {
+                throw new CustomError("Senha incorreta", 401);
+            }
+
+            const motoboys = await this.motoboyData.findMotoboyByUserId(user.id);
+            let motoboysJSON = motoboys.map(motoboy => motoboy.toJSON());
+            motoboysJSON = motoboysJSON.find(element => {
+                const payload = {
+                    id: element.id,
+                    companyId: element.empresaId
+                }
+                element.token = this.authenticator.generateToken(payload);
+                return element
+            })
+
+            return motoboysJSON
+        } catch (error:any) {
             throw new CustomError(error.message, error.statusCode);
         }
     }

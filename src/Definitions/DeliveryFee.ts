@@ -4,7 +4,7 @@ import { DeliveryFeeInstance, IDeliveryFee } from "../models/InterfaceDeliveryFe
 
 const database = new Database()
 
-export const DeliveryFee = database.sequelize.define<DeliveryFeeInstance, IDeliveryFee>('TaxaEntrega',{
+export const DeliveryFee = database.sequelize.define<DeliveryFeeInstance, IDeliveryFee>('TaxasEntrega',{
     id: {
         primaryKey: true,
         type: DataTypes.STRING,

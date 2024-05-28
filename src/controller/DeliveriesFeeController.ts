@@ -27,7 +27,7 @@ export class DeliveriesFeeController {
     getAllDeliveryFee = async (req: Request, res: Response): Promise<void> => {
         try {
             const token = req.headers.authorization as string;
-            const empresa_id = req.query.empresa_id as string; 
+            const empresa_id = req.query.empresa_id as string;       
             if (!empresa_id) {
                 throw new CustomError(
                     "Parâmetro empresa_id é obrigatório",

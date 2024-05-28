@@ -80,7 +80,7 @@ export class DeliveryFeeData implements IDeliveryFeeData {
             const deliveriesFee = await this.deliveriesFee.findOne({
                 where: {
                     id,
-                    empresaId,
+                    empresa_id: empresaId,
                     deletedAt: {
                         [Op.is]: null
                     }

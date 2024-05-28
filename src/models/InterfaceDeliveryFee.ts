@@ -31,4 +31,3 @@ export {
     DeliveryFeeInstance,
     IDeliveryFeeData
 }
-export { IDeliveryFee, DeliveryFeeInstance, IDeliveryFeeData };

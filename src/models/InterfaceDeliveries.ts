@@ -28,7 +28,7 @@ interface IDeliveriesData{
     updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
     insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>,
     findHistoryByMotoboyFUll(motoboyId:string): Promise<THistoryDeliveriesFull[] | null>
-    findHistoryFUll(): Promise<THistoryDeliveriesFull[] | null>
+    findHistoryFUll(companyId:string): Promise<THistoryDeliveriesFull[] | null>
     updateDataDeliveryById(deliveryId: string, data : TDataUpdateDeliveries): Promise< void |null>
 }
 

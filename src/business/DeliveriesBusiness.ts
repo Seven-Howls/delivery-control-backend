@@ -103,7 +103,7 @@ export class DeliveriesBusiness {
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
-            const deliveries = await this.deliveriesData.findHistoryFUll()
+            const deliveries = await this.deliveriesData.findHistoryFUll(isAuthorized.companyId)
 
             return deliveries
 

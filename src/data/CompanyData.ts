@@ -32,7 +32,7 @@ export class CompanyData implements ICompanyData {
                 `
                 SELECT
                     e.*
-                FROM espresas e
+                FROM empresas e
             `,
                 {
                     type: QueryTypes.SELECT,

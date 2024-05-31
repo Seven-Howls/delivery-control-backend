@@ -20,5 +20,15 @@ export class CompanyController {
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     }
+    
+    getCompany = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const companys = await this.companyBusiness.getCompany()
+
+            res.status(200).json(companys)
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
 
 }

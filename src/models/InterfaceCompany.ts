@@ -22,6 +22,7 @@ interface CompanyInstance extends Model<ICompany>, ICompany { }
 
 interface ICompanyData{
     findById(id: string): Promise<ICompany | null>
+    findAll(): Promise<ICompany[] | null>
     findAllByUser(cpf:string): Promise< ICompany[] | null >
 }
 

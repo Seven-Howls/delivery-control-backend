@@ -25,4 +25,13 @@ export class CompanyBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
+
+    getCompany = async (): Promise<ICompany[] | null> => {
+        try {
+            const companies = await this.companyData.findAll()
+            return companies
+        } catch (error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
+    }
 }

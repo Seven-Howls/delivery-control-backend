@@ -10,5 +10,11 @@ export type TMotoboyOfCompany = {
     motoboyCompany: {
         id: string,
         nomeFantasia: string
+    },
+    usuario: {
+        nome:string,
+        cpf: string,
+        celular: string,
+        email: string
     }
 } 

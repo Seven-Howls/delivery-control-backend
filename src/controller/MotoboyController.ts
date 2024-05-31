@@ -18,15 +18,6 @@ export class MotoboyController{
             res.status(error.statusCode || 400).send({error: error.message})
         }
     }
-    getAllMotoboysByCompanyId= async( req: Request, res: Response): Promise<void> => {
-        try{
-            const token = req.headers.authorization as string;
-            const motoboy = await this.motoboyBusiness.getAllMotoboysByCompanyId(token);
-            res.status(200).json(motoboy).send();
-        }catch(error: CustomError | any){
-            res.status(error.statusCode || 400).send({error: error.message})
-        }
-    }
 
     getAllMotoboys = async (req: Request, res: Response) => {
         try{

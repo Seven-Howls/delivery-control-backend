@@ -20,7 +20,6 @@ interface IMotoboyData {
     findPersonalDataOfMotoboy(motoboyId: string): Promise< TPersonalDataOfMotoboy | null >
     findAllByCompanyId(empresaId: string): Promise< IMotoboy[] | null >
     insert(usuarioId: string, empresaId: string): Promise<void>
-    findAllMotoboyByCompanyId(company_id: string): Promise<IMotoboy | null>
 }
 
 export {

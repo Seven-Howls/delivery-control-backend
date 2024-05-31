@@ -1,5 +1,5 @@
 import { Op, QueryTypes } from "sequelize";
-import { Motoboy, Company } from "../Definitions/index";
+import { Motoboy, Company, User } from "../Definitions/index";
 import { IMotoboy, IMotoboyData } from "../models/InterfaceMotoboy";
 import { CustomError } from "../utils/CustomError";
 import { v4 as uuid4 } from "uuid";
@@ -52,28 +52,6 @@ export class MotoboyData implements IMotoboyData{
             throw new CustomError(error.message, 500);
         }
     }
-    findAllMotoboyByCompanyId = async (empresaId: string): Promise<any> => {
-        try{
-            const motoboy = await this.motoboy.findAll({
-                where: {
-                    empresaId,
-                    deletedAt: {
-                        [Op.is]: null
-                    }
-                },
-                include:[
-                    {
-                        model: Company,
-                        as: 'motoboyCompany',
-                        attributes: ['id','nome_fantasia']
-                    }
-                ]
-            })
-            return motoboy
-        }catch(error: any){
-            throw new CustomError(error.message, 500);
-        }
-    }
 
     findByUserIdAndCompany = async (usuarioId: string, empresaId: string): Promise<IMotoboy | null> => {
         try{
@@ -111,7 +89,7 @@ export class MotoboyData implements IMotoboyData{
         }
     }
 
-    findAllByCompanyId = async (empresaId: string): Promise<IMotoboy[] | null> => {
+    findAllByCompanyId = async (empresaId: string): Promise<TMotoboyOfCompany[] | null> => {
         try{
             const motoboy = await this.motoboy.findAll({
                 where: {
@@ -119,9 +97,21 @@ export class MotoboyData implements IMotoboyData{
                     deletedAt: {
                         [Op.is]: null
                     }
-                }
+                },
+                include:[
+                    {
+                        model: Company,
+                        as: 'motoboyCompany',
+                        attributes: ['id','nome_fantasia']
+                    },
+                    {
+                        model: User,
+                        as: "usuario",
+                        attributes: ['nome','cpf','celular','email']
+                    }
+                ]
             })
-            return motoboy
+            return motoboy as unknown as TMotoboyOfCompany[]
         }catch(error: any){
             throw new CustomError(error.message, 500);
         }

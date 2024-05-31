@@ -28,9 +28,9 @@ export class DeliveryFeeData implements IDeliveryFeeData {
 
     findByCompanyId = async (
         empresa_id: string
-    ): Promise<IDeliveryFee | null> => {
+    ): Promise<IDeliveryFee[] | null> => {
         try {
-            const deliveriesFee = await this.deliveriesFee.findOne({
+            const deliveriesFee = await this.deliveriesFee.findAll({
                 where: {
                     empresa_id,
                     deletedAt: {

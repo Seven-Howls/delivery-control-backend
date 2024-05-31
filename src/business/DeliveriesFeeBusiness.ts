@@ -26,6 +26,10 @@ export class DeliveriesFeeBusiness {
 
     getDeliveryFeeById = async (id: string, token: string) => {
         try {
+            if (!token) throw new CustomError("Token ausente", 422)
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+
             const deliveryFee = await this.deliveriesFeeData.findById(id);
             if (!deliveryFee)
                 throw new CustomError("Taxa de Entrega não encontrada!", 404);
@@ -34,10 +38,16 @@ export class DeliveriesFeeBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     };
-    getAllDeliveriesFee = async (empresa_id: string, token: string) => {
+    getAllDeliveriesFee = async (token: string) => {
         try {
-            const allDeliveriesFee =
-                await this.deliveriesFeeData.findByCompanyId(empresa_id);
+            if (!token) throw new CustomError("Token ausente", 422)
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const company = await this.companyData.findById(isAuthorized.companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404);
+            
+            const allDeliveriesFee = await this.deliveriesFeeData.findByCompanyId(isAuthorized.companyId);
             if (!allDeliveriesFee)
                 throw new CustomError(
                     "Nenhuma Taxa de Entrega Encontrada!",
@@ -49,9 +59,18 @@ export class DeliveriesFeeBusiness {
         }
     };
 
-    createDeliveryFee = async (descricao: string, valor: number, empresa_id: string, token: string) => {
+    createDeliveryFee = async (descricao: string, valor: number, token: string) => {
         try {
-            await this.deliveriesFeeData.createNewFee(descricao, valor, empresa_id);
+            if (!token) throw new CustomError("Token ausente", 422)
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const company = await this.companyData.findById(isAuthorized.companyId);
+            if(!company) throw new CustomError("Empresa não encontrada", 404);
+
+            if(!descricao || !valor ) throw new CustomError("Parametros obrigatorios da taxa de entrega nao enviados (descricao,valor)", 422);
+
+            await this.deliveriesFeeData.createNewFee(descricao, valor, isAuthorized.companyId);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode)
         }
@@ -61,7 +80,7 @@ export class DeliveriesFeeBusiness {
         try {
             if (!token) throw new CustomError("Token ausente", 422)
             const isAuthorized = this.authenticator.getTokenData(token);
-            if (!isAuthorized) if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
             if (isNullOrUndefinedOrEmpty(data)) throw new CustomError("Dados obrigatorios do usuario não enviados", 422);
 
             const company = await this.companyData.findById(isAuthorized.companyId);
@@ -75,12 +94,12 @@ export class DeliveriesFeeBusiness {
 
             const deliveryFeeUpdate = {
                 id: id,
-                descricao: data.description,
-                valor: data.value,
-                deletedAt: data.deletedAt
+                descricao: data.description || deliveryFee.descricao,
+                valor: data.value || deliveryFee.valor,
+                empresaId: isAuthorized.companyId,
             }
 
-            await this.deliveriesFeeData.updateUser(data);
+            await this.deliveriesFeeData.updateUser(deliveryFeeUpdate);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode)
         }

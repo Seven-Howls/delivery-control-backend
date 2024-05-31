@@ -26,19 +26,10 @@ export class DeliveriesFeeController {
 
     getAllDeliveryFee = async (req: Request, res: Response): Promise<void> => {
         try {
-            const token = req.headers.authorization as string;
-            const empresa_id = req.query.empresa_id as string;       
-            if (!empresa_id) {
-                throw new CustomError(
-                    "Parâmetro empresa_id é obrigatório",
-                    400
-                );
-            }
+            const token = req.headers.authorization as string;       
+
             const allDeliveriesFee =
-                await this.deliveriesFeeBusiness.getAllDeliveriesFee(
-                    empresa_id,
-                    token
-                );
+                await this.deliveriesFeeBusiness.getAllDeliveriesFee(token);
             res.status(200).send(allDeliveriesFee);
         } catch (error: CustomError | any) {
             res.status(error.statusCode || 400).send({ error: error.message });
@@ -48,10 +39,10 @@ export class DeliveriesFeeController {
     createDeliveryFee = async (req: Request, res: Response): Promise<void> => {
         try {
             const token = req.headers.authorization as string;
+            const {description, value} = req.body
             await this.deliveriesFeeBusiness.createDeliveryFee(
-                req.body.descricao,
-                req.body.valor,
-                req.body.empresaId,
+                description,
+                value,
                 token
             );
             res.status(200).send("Taxa de Entrega Criada com Sucesso!");
@@ -66,7 +57,7 @@ export class DeliveriesFeeController {
             const id = req.params.id;
             const data: TCreateDeliveryFee = req.body;
 
-            await this.deliveriesFeeBusiness.updateDeliveryFee(token,id , data);
+            await this.deliveriesFeeBusiness.updateDeliveryFee(token, id, data);
             
             res.status(200).send("Taxa de Entrega atualizada com sucesso ");
         } catch (error: CustomError | any) {

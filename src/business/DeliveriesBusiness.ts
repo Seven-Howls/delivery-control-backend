@@ -41,11 +41,11 @@ export class DeliveriesBusiness {
 
     getDeliveriesInProgressByMotoBoy = async (token: string, motoboyId:string) => {
         try{
-            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);
 
-            //const isAuthorized = this.authenticator.getTokenData(token);
-            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
             const motoboy = await this.motoboyData.findById(motoboyId);
             if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
@@ -60,11 +60,11 @@ export class DeliveriesBusiness {
 
     getHistoryDeliveriesByMotoboy = async (token: string, motoboyId:string) => {
         try{
-            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);
 
-            //const isAuthorized = this.authenticator.getTokenData(token);
-            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
             const motoboy = await this.motoboyData.findById(motoboyId);
             if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
@@ -79,11 +79,11 @@ export class DeliveriesBusiness {
 
     getHistoryDeliveriesByMotoboyFull = async (token:string, motoboyId:string) => {
         try {
-            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!motoboyId) throw new CustomError("motoboyId ausente ou nulo na Path Variables ", 422);
 
-            //const isAuthorized = this.authenticator.getTokenData(token);
-            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
             const motoboy = await this.motoboyData.findById(motoboyId);
             if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
@@ -114,11 +114,11 @@ export class DeliveriesBusiness {
 
     updateDeliveryStatusById = async (token: string, deliveryId:string, motoboyId: string, statusId: string)  => {
         try{
-            //if(!token) throw new CustomError("Token ausente na autenticação",422);
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
             if(!motoboyId || !statusId) throw new CustomError("motoboyId ou statusId estão nulos no body", 422);
             if(!deliveryId) throw new CustomError("deliveryId ausente ou nulo na Path Variables ", 422);
-            //const isAuthorized = this.authenticator.getTokenData(token);
-            //if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
             const status = await this.statusData.getStatusById(statusId);
             if(!status) throw new CustomError("Status não encontrado", 404);
 

@@ -12,3 +12,4 @@ const companyBusiness = new CompanyBusiness(companyData);
 const companyController = new CompanyController(companyBusiness);
 
 companyRouter.get('/user', companyController.getCompanyUser);
+companyRouter.get('/', companyController.getCompany);

@@ -2,7 +2,7 @@ import { Op, QueryTypes } from "sequelize";
 import { Company } from "../Definitions";
 import { ICompany, ICompanyData } from "../models/InterfaceCompany";
 
-export class CompanyData implements ICompanyData{
+export class CompanyData implements ICompanyData {
     private company: typeof Company;
 
     constructor() {
@@ -10,25 +10,45 @@ export class CompanyData implements ICompanyData{
     }
 
     findById = async (id: string): Promise<ICompany | null> => {
-        try{
+        try {
             const company = await this.company.findOne({
                 where: {
                     id,
                     deletedAt: {
-                        [Op.is]: null
-                    }
-                }
-            })
+                        [Op.is]: null,
+                    },
+                },
+            });
 
             return company;
-        } catch (error: any){
+        } catch (error: any) {
             throw new Error(error.message);
         }
-    }
+    };
 
-    findAllByUser = async (cpf:string): Promise< ICompany[] | null > => {
+    findAll = async (): Promise<ICompany[] | null> => {
         try {
-            const companies = await this.company.sequelize?.query(`
+            const company = await this.company.sequelize?.query(
+                `
+                SELECT
+                    e.*
+                FROM espresas e
+            `,
+                {
+                    type: QueryTypes.SELECT,
+                }
+            );
+
+            return company as ICompany[];
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    };
+
+    findAllByUser = async (cpf: string): Promise<ICompany[] | null> => {
+        try {
+            const companies = await this.company.sequelize?.query(
+                `
                 SELECT 
                     e.*
                 FROM empresas e 
@@ -40,15 +60,16 @@ export class CompanyData implements ICompanyData{
                 AND u.deleted_at IS NULL 
                 AND c.deleted_at IS NULL 
                 AND e.deleted_at IS NULL
-            `,{
-                type: QueryTypes.SELECT,
-                replacements: { cpf }
-            })
+            `,
+                {
+                    type: QueryTypes.SELECT,
+                    replacements: { cpf },
+                }
+            );
 
-            return companies as ICompany[]
-        } catch (error:any) {
+            return companies as ICompany[];
+        } catch (error: any) {
             throw new Error(error.message);
         }
-    }
-
+    };
 }

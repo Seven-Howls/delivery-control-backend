@@ -47,6 +47,20 @@ export class DeliveriesController{
             res.status(err.statusCode || 400).send({error: err.message})
         }
     }
+
+    getHistoryDeliveiresFull = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const deliveries = await this.deliveriesBusiness.getHistoryDeliveriesFull(token);
+
+            res.status(200).json(deliveries).send();
+        } catch(err: any) {
+            res.status(err.statusCode || 400).send({error: err.message})
+        }
+    }
     updateDeliveryStatusById = async (req: Request, res: Response):Promise<void> => {
         try {
             const token = req.headers.authorization as string;

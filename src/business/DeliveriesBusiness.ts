@@ -96,6 +96,22 @@ export class DeliveriesBusiness {
         }
     }
 
+    getHistoryDeliveriesFull = async (token:string) => {
+        try {
+            if(!token) throw new CustomError("Token ausente na autenticação",422);
+
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if(!isAuthorized) throw new CustomError("Não autorizado", 401);
+
+            const deliveries = await this.deliveriesData.findHistoryFUll()
+
+            return deliveries
+
+        }catch(err: any) {
+            throw new CustomError(err.message, err.statusCode)
+        }
+    }
+
     updateDeliveryStatusById = async (token: string, deliveryId:string, motoboyId: string, statusId: string)  => {
         try{
             //if(!token) throw new CustomError("Token ausente na autenticação",422);

@@ -6,7 +6,7 @@ SELECT
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'id', e.id,
-            'taxas_entregas', (SELECT JSON_OBJECT('id', te.id, 'descricao', te.descricao) FROM taxa_entregas AS te WHERE te.id = e.taxa_entrega_id),
+            'taxas_entregas', (SELECT JSON_OBJECT('id', te.id, 'descricao', te.descricao) FROM taxas_entregas AS te WHERE te.id = e.taxa_entrega_id),
             'motoboy', JSON_OBJECT('id', m.id, 'nome', u.nome),
             'metodos_pagamentos', (SELECT JSON_OBJECT('id', mp.id, 'nome', mp.nome) FROM metodos_pagamentos AS mp WHERE mp.id = e.metodo_pagamento_id),
             'status', (SELECT JSON_OBJECT('id', s.id, 'nome', s.nome) FROM status AS s WHERE s.id = e.status_id),

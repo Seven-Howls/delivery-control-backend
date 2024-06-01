@@ -107,7 +107,7 @@ export class CollaboratorBusiness {
 
             if(!collaborator) throw new CustomError("Colaborador não encontrado", 404);
 
-            const token = this.authenticator.generateToken({id: collaborator.usuarioId, companyId: collaborator.empresaId, roleId: collaborator.tipoId });
+            const token = this.authenticator.generateToken({id: collaborator.id, companyId: collaborator.empresaId, roleId: collaborator.tipoId });
             
             return [token,collaborator];
         } catch (error: any) {

@@ -2,8 +2,9 @@ import { Op } from "sequelize";
 import { Collaborator } from "../Definitions/Colaborador";
 import { ICollaborator, ICollaboratorData } from "../models/InterfaceCollaborator";
 import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
-import { Company } from "../Definitions";
+import { Company, User } from "../Definitions";
 import { generateUuid } from "../utils/generateUuid";
+import { TCollaboratorAndUser } from "../types/TCollaboratorAndUser";
 
 export class CollaboratorData implements ICollaboratorData {
     private collaboratorData: typeof Collaborator
@@ -86,7 +87,7 @@ export class CollaboratorData implements ICollaboratorData {
             throw new Error(error.message);
         }
     }
-    findCollaboratorsByCompanyId = async (companyId: string): Promise<ICollaborator[] | null> => {
+    findCollaboratorsByCompanyId = async (companyId: string): Promise<TCollaboratorAndUser[] | null> => {
         try {
             const collaborators = await this.collaboratorData.findAll({
                 where: {
@@ -94,10 +95,20 @@ export class CollaboratorData implements ICollaboratorData {
                     deletedAt: {
                         [Op.is]: null
                     }
-                }
+                },
+                include: [
+                    {
+                        model:User,
+                        as: 'usuarioColaborador',
+                        attributes: ['nome','cpf','celular','email']
+                    }
+                ],
+                order: [
+                    ['created_at','DESC']
+                ]
             });
 
-            return collaborators;
+            return collaborators as unknown as TCollaboratorAndUser[];
         } catch (error: any) {
             throw new Error(error.message);
         }

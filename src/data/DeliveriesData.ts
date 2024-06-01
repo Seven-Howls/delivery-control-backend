@@ -117,7 +117,7 @@ export class DeliveriesData implements IDeliveriesData {
                         JSON_ARRAYAGG(
                             JSON_OBJECT(
                                 'id', e.id,
-                                'taxa_entrega', (SELECT JSON_OBJECT('id', te.id, 'descricao', te.descricao) FROM taxas_entregas AS te WHERE te.id = e.taxa_entrega_id),
+                                'taxas_entrega', (SELECT JSON_OBJECT('id', te.id, 'descricao', te.descricao) FROM taxas_entregas AS te WHERE te.id = e.taxa_entrega_id),
                                 'motoboy', (SELECT JSON_OBJECT('id', m.id) FROM motoboys AS m WHERE m.id = e.motoboy_id),
                                 'metodo_pagamento', (SELECT JSON_OBJECT('id', mp.id, 'descricao', mp.nome) FROM metodos_pagamentos AS mp WHERE mp.id = e.metodo_pagamento_id),
                                 'status', (SELECT JSON_OBJECT('id', s.id, 'descricao', s.nome) FROM status AS s WHERE s.id = e.status_id),

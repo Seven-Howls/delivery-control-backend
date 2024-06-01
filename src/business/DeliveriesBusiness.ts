@@ -136,19 +136,20 @@ export class DeliveriesBusiness {
         }
     }
 
-    createDelivery = async (token: string,companyId: string, delivery: TDeliveryCreated) => {
+    createDelivery = async (token: string, delivery: TDeliveryCreated) => {
         try{
             if(!token) throw new CustomError("Token ausente na autenticação",422);
+            console.log(delivery)
             if(!delivery) throw new CustomError("Entrega ausente ou nula no body", 422);
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
             
             const collaborator = await this.collaboratorData.findById(isAuthorized.id);
             if(!collaborator) throw new CustomError("Usuario nao encontrado", 404);
-            if(collaborator.empresaId !== companyId) throw new CustomError("Usuario não pertence a esta empresa", 401);
+            if(collaborator.empresaId !== isAuthorized.companyId) throw new CustomError("Usuario não pertence a esta empresa", 401);
             
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaborator?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === '1')
+            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId == '1')
             if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             const motoboy = await this.motoboyData.findById(delivery.motoboyId);   
@@ -163,6 +164,8 @@ export class DeliveriesBusiness {
             const paymentMethod = await this.paymentMethodData.findById(delivery.paymentMethodId);
             if(!paymentMethod) throw new CustomError("Metodo de pagamento não encontrado", 404);
 
+            delivery.equityValue = delivery.productValue + delivery.serviceFee + deliveryFee.valor;
+            console.log(delivery)
             const deliveryCreated = await this.deliveriesData.insertDelivery(delivery); 
 
             return deliveryCreated;
@@ -170,28 +173,39 @@ export class DeliveriesBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
-    updateDataDeliveryById = async (token: string, deliveryId:string, data: TDataUpdateDeliveries)  => {
+    updateDataDeliveryById = async (token: string, data: TDataUpdateDeliveries)  => {
         try{
             if(!token) throw new CustomError("Token ausente na autenticação",422);
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
-            if(!deliveryId) throw new CustomError("deliveryId ausente ou nulo na Path Variables ", 422);
-            const delivery = await this.deliveriesData.getDeliveryByIdAndMotoboy(deliveryId, data.motoboyId);
+            const delivery = await this.deliveriesData.findById(data.id as string);
             if(!delivery) throw new CustomError("Entrega não encontrada", 404);
-            if(data.motoboyId){
-                const motoboy = await this.motoboyData.findById(data.motoboyId);   
-                if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
-            }else if(data.statusId){
-                const status = await this.statusData.getStatusById(data.statusId);
-                if(!status) throw new CustomError("Status não encontrado", 404);
-            }else if(data.deliveryFeeId){
-                const deliveryFee = await this.deliveryFeeData.findByIdAndCompany(data.deliveryFeeId, isAuthorized.companyId); 
-                if(!deliveryFee) throw new CustomError("Taxa de entrega não encontrada", 404);
-            }else if(data.methodPaymentId){
-                const paymentMethod = await this.paymentMethodData.findById(data.methodPaymentId);
-                if(!paymentMethod) throw new CustomError("Metodo de pagamento não encontrado", 404);
+            const deliveryUpdate = {
+                id: data.id,
+                deliveryFeeId: data.deliveryFeeId || delivery.taxaEntregaId,
+                motoboyId: data.motoboyId || delivery.motoboyId,
+                methodPaymentId: data.methodPaymentId || delivery.metodoPagamentoId,
+                statusId: data.statusId || delivery.statusId,
+                equityValue: data.productValue || delivery.valorLiquido,
+                comandId: data.comandId || delivery.comandaId,
+                serviceFee: data.serviceFee || delivery.taxaServico,
+                productValue: 0
             }
-            await this.deliveriesData.updateDataDeliveryById(deliveryId, data);
+            const motoboy = await this.motoboyData.findById(deliveryUpdate.motoboyId);   
+            if(!motoboy) throw new CustomError("Motoboy não encontrado", 404);
+
+            const status = await this.statusData.getStatusById(deliveryUpdate.statusId);
+            if(!status) throw new CustomError("Status não encontrado", 404);
+            
+            const deliveryFee = await this.deliveryFeeData.findByIdAndCompany(deliveryUpdate.deliveryFeeId, isAuthorized.companyId); 
+            if(!deliveryFee) throw new CustomError("Taxa de entrega não encontrada", 404);
+
+            const paymentMethod = await this.paymentMethodData.findById(deliveryUpdate.methodPaymentId);
+            if(!paymentMethod) throw new CustomError("Metodo de pagamento não encontrado", 404);
+
+            deliveryUpdate.productValue = deliveryUpdate.equityValue + deliveryUpdate.serviceFee + deliveryFee.valor;
+
+            await this.deliveriesData.updateDataDeliveryById(deliveryUpdate);
             return "Entrega atualizada com sucesso"
         }catch(error: any){
             throw new CustomError(error.message, error.statusCode);

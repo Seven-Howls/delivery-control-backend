@@ -6,7 +6,7 @@ export type TDeliveryCreated = {
     statusId: string,
     productValue: number,
     serviceFee: number,
-    equityValue: number,
+    equityValue?: number,
     commandId: number,
     createdAt: Date,
     updatedAt: Date,

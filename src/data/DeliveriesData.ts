@@ -36,6 +36,22 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(error.message);
         }
     };
+    findById = async (id:string): Promise<IDeliveries | null> => {
+        try {
+            const delivery = await this.deliveries.findOne({
+                where: {
+                    id,
+                    deletedAt: {
+                        [Op.is]: null,
+                    },
+                },
+            });
+
+            return delivery;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
 
     findStatusInProgressByMotoboy = async (
         motoboyId: string
@@ -179,7 +195,7 @@ export class DeliveriesData implements IDeliveriesData {
                 statusId: delivery.statusId,
                 valorProduto: delivery.productValue,
                 taxaServico: delivery.serviceFee,
-                valorLiquido: delivery.equityValue,
+                valorLiquido: delivery.equityValue as number,
                 comandaId: delivery.commandId,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -193,7 +209,6 @@ export class DeliveriesData implements IDeliveriesData {
         }
     };
     updateDataDeliveryById = async (
-        deliveryId: string,
         data: TDataUpdateDeliveries
     ): Promise<void> => {
         try {
@@ -203,14 +218,14 @@ export class DeliveriesData implements IDeliveriesData {
                     motoboyId: data.motoboyId,
                     metodoPagamentoId: data.methodPaymentId,
                     statusId: data.statusId,
-                    taxaServico: data.serviceValue,
+                    taxaServico: data.serviceFee,
                     valorProduto: data.productValue,
-                    valorLiquido: data.serviceValue + data.productValue,
+                    valorLiquido: data.equityValue,
                     comandaId: data.comandId,
                 },
                 {
                     where: {
-                        id: deliveryId,
+                        id: data.id,
                     },
                 }
             );

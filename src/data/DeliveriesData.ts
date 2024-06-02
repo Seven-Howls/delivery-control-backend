@@ -128,8 +128,6 @@ export class DeliveriesData implements IDeliveriesData {
                 (await this.deliveries.sequelize?.query(
                     selectHistoryDeliveryAll,
                     {
-                    selectHistoryDeliveryAll,  {
-
                         type: QueryTypes.SELECT,
                         replacements: { companyId }
                     }

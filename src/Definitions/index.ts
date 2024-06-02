@@ -25,4 +25,7 @@ Motoboy.hasMany(Deliveries, {foreignKey: 'motoboyId', as: 'motoboy'})
 Motoboy.belongsTo(User,{ foreignKey:'usuarioId', as: 'usuario'})
 User.hasMany(Motoboy,{ foreignKey:'usuarioId', as: 'usuario'})
 
+Collaborator.belongsTo(User, { foreignKey:'usuarioId', as: 'usuarioColaborador'})
+User.hasMany(Collaborator,{ foreignKey:'usuarioId', as: 'usuarioColaborador'})
+
 export { Deliveries, Status, Motoboy, Company, User, Collaborator, UserTypePermissions, Permissions }

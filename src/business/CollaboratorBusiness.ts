@@ -118,13 +118,12 @@ export class CollaboratorBusiness {
     findAllCollaborators = async (token: string) => {
         if (!token) throw new CustomError("Token ausente na autenticação", 422);
         const isAuthorized = this.authenticator.getTokenData(token);
-        const companyId = isAuthorized.companyId;
         if (!isAuthorized) throw new CustomError("Não autorizado", 401);
     
-        const company = await this.companyData.findById(companyId);
+        const company = await this.companyData.findById(isAuthorized.companyId);
         if (!company) throw new CustomError("Empresa não encontrada", 404);
     
-        const collaborators = await this.collaboratorData.findCollaboratorsByCompanyId(companyId);
+        const collaborators = await this.collaboratorData.findCollaboratorsByCompanyId(isAuthorized.companyId);
         if (!collaborators || collaborators.length === 0) throw new CustomError("Nenhum colaborador encontrado", 404);
     
         return collaborators;

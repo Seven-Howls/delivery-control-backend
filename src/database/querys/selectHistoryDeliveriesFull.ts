@@ -6,10 +6,10 @@ SELECT
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'id', e.id,
-            'taxas_entregas', (SELECT JSON_OBJECT('id', te.id, 'descricao', te.descricao) FROM taxa_entregas AS te WHERE te.id = e.taxa_entrega_id),
-            'motoboy', JSON_OBJECT('id', m.id, 'nome', u.nome),
-            'metodos_pagamentos', (SELECT JSON_OBJECT('id', mp.id, 'nome', mp.nome) FROM metodos_pagamentos AS mp WHERE mp.id = e.metodo_pagamento_id),
-            'status', (SELECT JSON_OBJECT('id', s.id, 'nome', s.nome) FROM status AS s WHERE s.id = e.status_id),
+            'taxa_entrega', JSON_OBJECT('id', te.id, 'descricao', te.descricao, 'valor', te.valor),
+            'motoboy', JSON_OBJECT('id', m.id, 'nome', u.nome, 'celular', u.celular),
+            'metodo_pagamento', JSON_OBJECT('id', mp.id, 'nome', mp.nome),
+            'status', JSON_OBJECT('id', s.id, 'nome', s.nome),
             'valor_produto', e.valor_produto,
             'taxa_servico', e.taxa_servico,
             'valor_liquido', e.valor_liquido,
@@ -22,7 +22,10 @@ SELECT
 FROM entregas AS e
 JOIN motoboys AS m ON e.motoboy_id = m.id
 JOIN usuarios AS u ON m.usuario_id = u.id
+JOIN taxas_entregas AS te ON e.taxa_entrega_id = te.id
+JOIN metodos_pagamentos AS mp ON e.metodo_pagamento_id = mp.id
+JOIN status AS s ON e.status_id = s.id
 WHERE e.motoboy_id = :motoboyId
 AND e.deleted_at IS NULL
-GROUP BY data_entrega;
+GROUP BY data_entrega
 `;

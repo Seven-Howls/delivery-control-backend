@@ -127,7 +127,6 @@ export class MotoboyBusiness {
 
             const motoboys = await this.motoboyData.findMotoboyByUserId(user.id);
             let motoboysJSON = motoboys.map(motoboy => motoboy.toJSON());
-            console.log(motoboysJSON)
             motoboysJSON = motoboysJSON.map(element => {
                 const payload = {
                     id: element.id,
@@ -136,7 +135,6 @@ export class MotoboyBusiness {
                 element.token = this.authenticator.generateToken(payload);
                 return element
             })
-            console.log(motoboysJSON)
             return motoboysJSON
         } catch (error:any) {
             throw new CustomError(error.message, error.statusCode);

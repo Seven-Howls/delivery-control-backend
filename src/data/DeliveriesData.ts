@@ -126,7 +126,8 @@ export class DeliveriesData implements IDeliveriesData {
         try {
             const history: THistoryDeliveriesFull[] =
                 (await this.deliveries.sequelize?.query(
-                    selectHistoryDeliveryAll,  {
+                    selectHistoryDeliveryAll,
+                    {
                         type: QueryTypes.SELECT,
                         replacements: { companyId }
                     }

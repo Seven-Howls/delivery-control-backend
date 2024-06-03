@@ -48,14 +48,6 @@ export class DeliveriesController {
             res.status(err.statusCode || 400).send({ error: err.message })
         }
     }
-    getQueryDelivery(req: Request): { pageNumber: number, perPageNumber: number, Date: Date  } {
-        const { page, perPage } = req.query;
-        const Date: Date = req.body.Date 
-        console.log(Date)
-        const pageNumber = parseInt(page as string) || 1; 
-        const perPageNumber = parseInt(perPage as string) || 10;
-        return { pageNumber, perPageNumber, Date };
-    }
     
     getHistoryDeliveiresFull = async (req: Request, res: Response): Promise<void> => {
         try {

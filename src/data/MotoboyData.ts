@@ -6,6 +6,7 @@ import { v4 as uuid4 } from "uuid";
 import { generateUuid } from "../utils/generateUuid";
 import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
 import { TMotoboyOfCompany, TMotoboyOfCompanyPagination } from "../types/TMotoboyOfCompany";
+import { create } from "domain";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy
@@ -112,7 +113,8 @@ export class MotoboyData implements IMotoboyData{
                     }
                 ],
                 limit: perPage,
-                offset
+                offset,
+                order: [['created_at', "ASC"]]
             })
             return {
                 motoboys: rows,

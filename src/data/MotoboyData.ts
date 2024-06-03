@@ -5,7 +5,7 @@ import { CustomError } from "../utils/CustomError";
 import { v4 as uuid4 } from "uuid";
 import { generateUuid } from "../utils/generateUuid";
 import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
-import { TMotoboyOfCompany } from "../types/TMotoboyOfCompany";
+import { TMotoboyOfCompany, TMotoboyOfCompanyPagination } from "../types/TMotoboyOfCompany";
 
 export class MotoboyData implements IMotoboyData{
     private motoboy: typeof Motoboy
@@ -89,9 +89,10 @@ export class MotoboyData implements IMotoboyData{
         }
     }
 
-    findAllByCompanyId = async (empresaId: string): Promise<TMotoboyOfCompany[] | null> => {
+    findAllByCompanyId = async (empresaId: string, page: number, perPage: number): Promise<TMotoboyOfCompanyPagination[] | null> => {
         try{
-            const motoboy = await this.motoboy.findAll({
+            const offset = (page - 1) * perPage
+            const {count,rows} = await this.motoboy.findAndCountAll({
                 where: {
                     empresaId,
                     deletedAt: {
@@ -109,9 +110,15 @@ export class MotoboyData implements IMotoboyData{
                         as: "usuario",
                         attributes: ['nome','cpf','celular','email']
                     }
-                ]
+                ],
+                limit: perPage,
+                offset
             })
-            return motoboy as unknown as TMotoboyOfCompany[]
+            return {
+                motoboys: rows,
+                page,
+                perPage,
+                total: count } as unknown as TMotoboyOfCompanyPagination[]
         }catch(error: any){
             throw new CustomError(error.message, 500);
         }

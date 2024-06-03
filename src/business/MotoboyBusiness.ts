@@ -49,13 +49,12 @@ export class MotoboyBusiness {
         }
     }
 
-    getAllMotoboys = async (token: string) => {
+    getAllMotoboys = async (token: string, page: number, perPage: number) => {
         try{
             if(!token) throw new CustomError("Token ausente na autenticação",422);
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
-
-            const motoboys = await this.motoboyData.findAllByCompanyId(isAuthorized.companyId);
+            const motoboys = await this.motoboyData.findAllByCompanyId(isAuthorized.companyId, page, perPage);
             return motoboys;
         } catch(error: any) {
             throw new CustomError(error.message, error.statusCode);

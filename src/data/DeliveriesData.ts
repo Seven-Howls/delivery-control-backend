@@ -1,12 +1,12 @@
 import { Op, QueryTypes } from "sequelize";
-import { Deliveries, Status } from "../Definitions/index";
+import { Deliveries, DeliveryFee, Motoboy, PaymentMethod, Status } from "../Definitions/index";
 import { IDeliveries, IDeliveriesData } from "../models/InterfaceDeliveries";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
 import { selectHistoryDeliveriesFull } from "../database/querys/selectHistoryDeliveriesFull";
 import { v4 as uuid4 } from "uuid";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
-import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { THistoryDeliveriesFull, THistoryDeliveriesFullPagination } from "../types/THistoryDeliveriesFull";
 import { generateUuid } from "../utils/generateUuid";
 import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
 import { All_entregas, numero_entregas, selectHistoryDeliveryAll } from "../database/querys/selectHistoryDeliveryAll";
@@ -122,58 +122,51 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(err.message);
         }
     };
-    findHistoryFUll = async (companyId: string, pageNumber: number, perPageNumber: number, Date: Date | undefined): Promise<THistoryDeliveriesFull[] | null> => {
+    findHistoryFUll = async (companyId: string, page: number, perPage: number): Promise<THistoryDeliveriesFullPagination | null> => {
         try {
-            const offset = (pageNumber - 1) * perPageNumber;
-    
-            let generalData: THistoryDeliveriesFull[] = [];
-            let deliveryData: THistoryDeliveriesFull[] = [];
-    
-          
-            if (Date !== undefined) {
-                generalData = await this.deliveries.sequelize?.query(
-                    numero_entregas,
-                    {
-                        type: QueryTypes.SELECT,
-                        replacements: { dateParam: Date, companyId }
+            const offset = (page - 1) * perPage;
+            const {count, rows} = await this.deliveries.findAndCountAll({
+                where: {
+                    deletedAt: {
+                        [Op.is]: null,
                     }
-                ) as THistoryDeliveriesFull[];
-            }
-            if (Date === undefined) {
-                generalData = await this.deliveries.sequelize?.query(
-                    All_entregas,
+                },
+                attributes: ['id','valorProduto','taxaServico','valorLiquido','comandaId','createdAt','updatedAt'],
+                include: [
                     {
-                        type: QueryTypes.SELECT,
-                        replacements: {  companyId }
-                    }
-                ) as THistoryDeliveriesFull[];
-            }
-            
-    
-          
-            if (Date === undefined) {
-                deliveryData = await this.deliveries.sequelize?.query(
-                    selectHistoryDeliveryAll,
+                        model: Motoboy,
+                        as: 'motoboy',
+                        attributes: ['id','usuarioId','empresaId'],
+                        where: {
+                            empresaId: companyId
+                        }
+                    },
                     {
-                        type: QueryTypes.SELECT,
-                        replacements: { companyId, limit: perPageNumber, offset }
-                    }
-                ) as THistoryDeliveriesFull[];
-            } else {
-                deliveryData = await this.deliveries.sequelize?.query(
-                    selectHistoryDeliveryAll,
+                        model: Status,
+                        as: "deliveriesStatus",
+                        attributes: ['id','nivel','nome']
+                    },
                     {
-                        type: QueryTypes.SELECT,
-                        replacements: { dateParam: Date, companyId, limit: perPageNumber, offset }
+                        model: DeliveryFee,
+                        as: 'taxaEntrega',
+                        attributes: ['id', 'valor', 'descricao']
+                    },
+                    {
+                        model: PaymentMethod,
+                        as: 'metodoPagamento',
+                        attributes: ['id','nome']
                     }
-                ) as THistoryDeliveriesFull[];
-            }
-    
-            
-            const result: THistoryDeliveriesFull[] = [...generalData, ...deliveryData];
-    
-            console.log(companyId, perPageNumber, offset);
-            return result;
+                ],
+                offset,
+                limit: perPage,
+                order: [['createdAt','ASC']]
+            })
+
+            return {
+                entregas: rows,
+                page,
+                perPage,
+                total: count } as unknown as THistoryDeliveriesFullPagination;
         } catch (err: any) {
             throw new Error(err.message);
         }

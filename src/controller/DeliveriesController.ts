@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { DeliveriesBusiness } from "../business/DeliveriesBusiness";
 import { CustomError } from "../utils/CustomError";
+import { getPaginationParams } from "../utils/getPaginationParams";
 
 export class DeliveriesController {
     private deliveriesBusiness: DeliveriesBusiness;
@@ -58,11 +59,10 @@ export class DeliveriesController {
     
     getHistoryDeliveiresFull = async (req: Request, res: Response): Promise<void> => {
         try {
-            const { pageNumber, perPageNumber, Date } = this.getQueryDelivery(req); 
-    
+            const [page, perPage] = getPaginationParams(req.query)
             const token = req.headers.authorization as string;
     
-            const deliveries = await this.deliveriesBusiness.getHistoryDeliveriesFull(token, pageNumber, perPageNumber, Date);
+            const deliveries = await this.deliveriesBusiness.getHistoryDeliveriesFull(token, page, perPage);
     
             res.status(200).json(deliveries);
         } catch (err: any) {

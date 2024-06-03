@@ -1,3 +1,41 @@
+export type THistoryDeliveriesFullPagination = {
+  page: number,
+  perPage: number,
+  total: number,
+  entregas: TDeliveriesFull[]
+}
+
+export type TDeliveriesFull = {
+
+    id: string,
+    valorProduto: number,
+    taxaServico: number,
+    valorLiquido: number,
+    comandaId: number,
+    createdAt: string,
+    updatedAt: string,
+    motoboy: {
+        id: string,
+        usuarioId: string,
+        empresaId: string
+    },
+    deliveriesStatus: {
+        id: string,
+        nivel: number,
+        nome: string
+    },
+    taxaEntrega: {
+        id: string,
+        valor: number,
+        descricao: string
+    },
+    metodoPagamento: {
+        id: string,
+        nome: string
+    }
+}
+
+
 export type THistoryDeliveriesFull = {
   numero_entregas: number,
   data_entrega: Date,

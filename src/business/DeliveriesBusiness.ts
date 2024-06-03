@@ -96,14 +96,14 @@ export class DeliveriesBusiness {
         }
     }
 
-    getHistoryDeliveriesFull = async (token:string) => {
+    getHistoryDeliveriesFull = async (token:string, pageNumber:number, perPageNumber:number, Date :Date) => {
         try {
             if(!token) throw new CustomError("Token ausente na autenticação",422);
 
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
-            const deliveries = await this.deliveriesData.findHistoryFUll(isAuthorized.companyId)
+            const deliveries = await this.deliveriesData.findHistoryFUll(isAuthorized.companyId , pageNumber, perPageNumber, Date)
 
             return deliveries
 

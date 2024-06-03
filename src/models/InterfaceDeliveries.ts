@@ -28,8 +28,8 @@ interface IDeliveriesData{
     findHistoryByMotoboy(motoboyId:string): Promise<THistoryDeliveries[] | null | undefined>,
     updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
     insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>,
-    findHistoryByMotoboyFUll(motoboyId:string): Promise<THistoryDeliveriesFull[] | null>
-    findHistoryFUll(companyId:string): Promise<THistoryDeliveriesFull[] | null>
+    findHistoryByMotoboyFUll(motoboyId:string ): Promise<THistoryDeliveriesFull[] | null>
+    findHistoryFUll(companyId:string , pageNumber:number, perPageNumber:number,date :Date): Promise<THistoryDeliveriesFull[] | null>
     updateDataDeliveryById(data : TDataUpdateDeliveries): Promise< void |null>
 }
 

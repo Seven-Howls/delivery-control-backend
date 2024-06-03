@@ -9,7 +9,7 @@ import { TDeliveryCreated } from "../types/TDeliveryCreated";
 import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
 import { generateUuid } from "../utils/generateUuid";
 import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
-import { selectHistoryDeliveryAll } from "../database/querys/selectHistoryDeliveryAll";
+import { All_entregas, numero_entregas, selectHistoryDeliveryAll } from "../database/querys/selectHistoryDeliveryAll";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries;
@@ -122,17 +122,58 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(err.message);
         }
     };
-    findHistoryFUll = async (companyId:string): Promise<THistoryDeliveriesFull[] | null> => {
+    findHistoryFUll = async (companyId: string, pageNumber: number, perPageNumber: number, Date: Date | undefined): Promise<THistoryDeliveriesFull[] | null> => {
         try {
-            const history: THistoryDeliveriesFull[] =
-                (await this.deliveries.sequelize?.query(
+            const offset = (pageNumber - 1) * perPageNumber;
+    
+            let generalData: THistoryDeliveriesFull[] = [];
+            let deliveryData: THistoryDeliveriesFull[] = [];
+    
+          
+            if (Date !== undefined) {
+                generalData = await this.deliveries.sequelize?.query(
+                    numero_entregas,
+                    {
+                        type: QueryTypes.SELECT,
+                        replacements: { dateParam: Date, companyId }
+                    }
+                ) as THistoryDeliveriesFull[];
+            }
+            if (Date === undefined) {
+                generalData = await this.deliveries.sequelize?.query(
+                    All_entregas,
+                    {
+                        type: QueryTypes.SELECT,
+                        replacements: {  companyId }
+                    }
+                ) as THistoryDeliveriesFull[];
+            }
+            
+    
+          
+            if (Date === undefined) {
+                deliveryData = await this.deliveries.sequelize?.query(
                     selectHistoryDeliveryAll,
                     {
                         type: QueryTypes.SELECT,
-                        replacements: { companyId }
+                        replacements: { companyId, limit: perPageNumber, offset }
                     }
-                )) as THistoryDeliveriesFull[];
-            return history;
+                ) as THistoryDeliveriesFull[];
+            } else {
+                deliveryData = await this.deliveries.sequelize?.query(
+                    selectHistoryDeliveryAll,
+                    {
+                        type: QueryTypes.SELECT,
+                        replacements: { dateParam: Date, companyId, limit: perPageNumber, offset }
+                    }
+                ) as THistoryDeliveriesFull[];
+            }
+    
+            
+            const result: THistoryDeliveriesFull[] = [...generalData, ...deliveryData];
+    
+            console.log(companyId, perPageNumber, offset);
+            return result;
         } catch (err: any) {
             throw new Error(err.message);
         }

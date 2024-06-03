@@ -10,7 +10,7 @@ export class CollaboratorController {
     signup = async (req: Request, res: Response): Promise<void> => {
         try {
             const token = req.headers.authorization as string;
-            const {user, companyId, typeId} = req.body;
+            const {user} = req.body;
             await this.collaboratorBusiness.signup(user, token);
             res.status(201).send({message: "Colaborador criado com sucesso"});
         } catch (error: any) {

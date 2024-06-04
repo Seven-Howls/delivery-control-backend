@@ -68,7 +68,7 @@ export class DeliveriesData implements IDeliveriesData {
                     ],
                 },
                 where: {
-                    statusId: 1,
+                    statusId: 5,
                     motoboyId,
                     deletedAt: {
                         [Op.is]: null,

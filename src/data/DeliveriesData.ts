@@ -68,7 +68,6 @@ export class DeliveriesData implements IDeliveriesData {
                     ],
                 },
                 where: {
-                    statusId: 1,
                     motoboyId,
                     deletedAt: {
                         [Op.is]: null,
@@ -79,6 +78,9 @@ export class DeliveriesData implements IDeliveriesData {
                         model: Status,
                         as: "deliveriesStatus",
                         attributes: ["id", "nome", "nivel"],
+                        where:{
+                            nivel: 1
+                        }
                     },
                 ],
             });
@@ -159,7 +161,7 @@ export class DeliveriesData implements IDeliveriesData {
                 ],
                 offset,
                 limit: perPage,
-                order: [['createdAt','ASC']]
+                order: [['createdAt','DESC']]
             })
 
             return {

@@ -1,5 +1,5 @@
 import { Op, QueryTypes } from "sequelize";
-import { Deliveries, DeliveryFee, Motoboy, PaymentMethod, Status } from "../Definitions/index";
+import { Deliveries, DeliveryFee, Motoboy, PaymentMethod, Status, User } from "../Definitions/index";
 import { IDeliveries, IDeliveriesData } from "../models/InterfaceDeliveries";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
@@ -141,7 +141,14 @@ export class DeliveriesData implements IDeliveriesData {
                         attributes: ['id','usuarioId','empresaId'],
                         where: {
                             empresaId: companyId
-                        }
+                        },
+                        include: [
+                            {
+                                model: User,
+                                as: 'usuario',
+                                attributes: ['id','nome']
+                            }
+                        ]
                     },
                     {
                         model: Status,

@@ -49,6 +49,26 @@ export class UserData implements IUserData {
         }
     }
 
+    findByEmail = async (email: string): Promise<IUser | null> => {
+        try {
+            const user = this.user.findOne({
+                attributes: {
+                    exclude: ['createdAt','deletedAt','updatedAt','senha']
+                },
+                where: {
+                    email,
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                }
+            });
+
+            return user;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
     insertUser = async (data: TCreateUserData): Promise<IUser | null> => {
         try {
             console.log({

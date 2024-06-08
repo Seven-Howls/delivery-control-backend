@@ -19,6 +19,7 @@ interface UserInstance extends Model<IUser>, IUser { }
 interface IUserData{
     findByCpf(cpf: string, deleted: boolean): Promise<IUser | null>
     findById(id: string): Promise<IUser | null>
+    findByEmail(email: string): Promise<IUser | null>
     insertUser(data: TCreateUserData): Promise<IUser | null>
     updateUser(data: TUpdateUser): Promise<void>
 }

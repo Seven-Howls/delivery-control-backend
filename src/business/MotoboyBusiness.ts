@@ -80,11 +80,15 @@ export class MotoboyBusiness {
             if(!userTypePermissions) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             let user = await this.userData.findByCpf(dataUser.cpf, true);
+            const userByEmail = await this.userData.findByEmail(dataUser.email);
             if(!user){
-                
+                if(userByEmail) throw new CustomError("Email ja esta sendo usado", 409);
                 dataUser.password = await this.securePassword.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
+                if(user.email !== dataUser.email){
+                    if(userByEmail) throw new CustomError("Email ja esta sendo usado", 409);            
+                }
                 const userUpdate = {
                     id: user.id,
                     nome: user.nome,

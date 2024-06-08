@@ -32,7 +32,9 @@ export class UserData implements IUserData {
     findById = async (id: string): Promise<IUser | null> => {
         try {
             const user = this.user.findOne({
-                attributes: ['id', 'nome'],
+                attributes: {
+                    exclude: ['createdAt','deletedAt','updatedAt','senha']
+                },
                 where: {
                     id,
                     deletedAt: {

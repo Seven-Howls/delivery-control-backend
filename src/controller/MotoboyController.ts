@@ -61,6 +61,16 @@ export class MotoboyController{
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     }
+    
+    getUserData = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const user = await this.motoboyBusiness.getUserData(token);
+            res.status(200).json(user)
+        } catch (error: CustomError | any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
 }
     
     

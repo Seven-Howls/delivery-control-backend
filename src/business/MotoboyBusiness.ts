@@ -61,7 +61,7 @@ export class MotoboyBusiness {
         }
     }
 
-    signup = async (token: string, companyId: string, dataUser: TCreateUserData): Promise<void> => {
+    signup = async (token: string, dataUser: TCreateUserData): Promise<void> => {
         try {
             if(!dataUser.celular || !dataUser.cpf || !dataUser.nome || !dataUser.password || !dataUser.email) throw new CustomError("Parametros obrigatorios do usuario não enviados", 422);
 
@@ -69,20 +69,19 @@ export class MotoboyBusiness {
             const isAuthorized = this.authenticator.getTokenData(token);
             if(!isAuthorized) throw new CustomError("Não autorizado", 401);
 
-            if(!companyId) throw new CustomError("companyId não enviado", 422);
-            const company = await this.companyData.findById(companyId);
+            const company = await this.companyData.findById(isAuthorized.companyId);
             if(!company) throw new CustomError("Empresa não encontrada", 404); 
 
             const collaboratorCreated = await this.collaboratorData.findById(isAuthorized.id);
             if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
-            if(collaboratorCreated.empresaId !== companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
+            if(collaboratorCreated.empresaId !== isAuthorized.companyId) throw new CustomError("Usuario criador não pertence a esta empresa", 401);
 
-            const userTypePermissions = await this.userTypePermissionsData.findByTypeUser(collaboratorCreated?.tipoId)
-            const isAuthorizedForType = userTypePermissions?.some(userTypePermission =>  userTypePermission.permissaoId === '3')
-            if(!isAuthorizedForType) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
+            const userTypePermissions = await this.userTypePermissionsData.findByTypeUserAndLevel(collaboratorCreated.tipoId,3)
+            if(!userTypePermissions) throw new CustomError("Seu perfil não esta autorizado a usar essa funcinalidade", 401);
 
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
+                
                 dataUser.password = await this.securePassword.hash(dataUser.password);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
@@ -97,10 +96,10 @@ export class MotoboyBusiness {
                 await this.userData.updateUser(userUpdate);
             }
 
-            const motoboy = await this.motoboyData.findByUserIdAndCompany(user?.id as string, companyId)
+            const motoboy = await this.motoboyData.findByUserIdAndCompany(user?.id as string, isAuthorized.companyId)
             if(motoboy) throw new  CustomError("Motoboy ja existente", 409);
             
-            await this.motoboyData.insert(user?.id as string, companyId);
+            await this.motoboyData.insert(user?.id as string, isAuthorized.companyId);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
         }

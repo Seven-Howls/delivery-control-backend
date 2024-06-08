@@ -51,6 +51,16 @@ export class UserData implements IUserData {
 
     insertUser = async (data: TCreateUserData): Promise<IUser | null> => {
         try {
+            console.log({
+                id: generateUuid(),
+                celular: data.celular,
+                cpf: data.cpf,
+                nome: data.nome,
+                senha: data.password,
+                email: data.email,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            })
             const user = await this.user.create({
                 id: generateUuid(),
                 celular: data.celular,
@@ -59,9 +69,9 @@ export class UserData implements IUserData {
                 senha: data.password,
                 email: data.email,
                 createdAt: new Date(),
-                updatedAt: new Date(),
-                deletedAt: null
+                updatedAt: new Date()
             })
+            console.log(user)
             await user.save();
 
             return user;

@@ -34,8 +34,8 @@ export class MotoboyController{
     signup = async (req: Request, res: Response): Promise<void> => {
         try {
             const token =  req.headers.authorization as string;
-            const {userData, empresaId} = req.body;
-            await this.motoboyBusiness.signup(token, empresaId, userData);
+            const {userData} = req.body;
+            await this.motoboyBusiness.signup(token, userData);
             
             res.status(201).send({message: "Motoboy cadastrado com sucesso"})
         } catch (error: any) {

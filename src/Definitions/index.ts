@@ -8,6 +8,7 @@ import { UserTypePermissions } from "./UserTypePermissions";
 import { Permissions } from "./Permissions";
 import { DeliveryFee } from "./DeliveryFee";
 import { PaymentMethod } from "./PaymentMethod";
+import { UserType } from "./UserType";
 
 Deliveries.belongsTo(Status, { foreignKey: 'statusId' , as: 'deliveriesStatus'})
 Status.hasMany(Deliveries,{foreignKey: 'statusId', as: 'deliveriesStatus'})
@@ -36,4 +37,7 @@ DeliveryFee.hasMany(Deliveries,{foreignKey: 'taxaEntregaId', as: 'taxaEntrega'})
 Deliveries.belongsTo(PaymentMethod, {foreignKey: 'metodoPagamentoId', as: 'metodoPagamento'})
 PaymentMethod.hasMany(Deliveries,{foreignKey: 'metodoPagamentoId', as: 'metodoPagamento'})
 
-export { Deliveries, Status, Motoboy, Company, User, Collaborator, UserTypePermissions, Permissions, DeliveryFee, PaymentMethod}
+UserType.belongsToMany(Permissions, {through: UserTypePermissions, foreignKey: "tipoUsuarioId", as:"permissionsDetails"})
+Permissions.belongsToMany(UserType,{through:UserTypePermissions, foreignKey: "permissaoId", as: "permissionsDetails"})
+
+export { Deliveries, Status, Motoboy, Company, User, Collaborator, UserTypePermissions, Permissions, DeliveryFee, PaymentMethod,UserType}

@@ -11,9 +11,15 @@ interface IPermissions {
 
 interface PermissionsInstance extends Model<IPermissions>, IPermissions { }
 
+
+interface IPermissionData {
+    findAll(id: string): Promise<IPermissionData[] | null>
+}
+
 export {
     IPermissions,
-    PermissionsInstance
+    PermissionsInstance,
+    IPermissionData
 }
 
 

@@ -47,7 +47,7 @@ export class CollaboratorBusiness {
             const company = await this.companyData.findById(isAuthorized.companyId);
             if(!company) throw new CustomError("Empresa não encontrada", 404);
 
-            const collaboratorCreated = await this.collaboratorData.findByUserIdAndCompanyId(isAuthorized.id,isAuthorized.companyId);
+            const collaboratorCreated = await this.collaboratorData.findById(isAuthorized.id);
             if(!collaboratorCreated) throw new CustomError("Usuario criador nao encontrado", 404);
             
             const userTypePermissions = await this.userTypePermissionsData.findByTypeUserAndLevel(collaboratorCreated.tipoId,7)
@@ -55,7 +55,7 @@ export class CollaboratorBusiness {
            
             let user = await this.userData.findByCpf(dataUser.cpf, true);
             if(!user){
-                dataUser.password = await this.securePassword.hash(dataUser.password);
+                dataUser.password = await this.securePassword.hash(dataUser.cpf);
                 user = await this.userData.insertUser(dataUser);
             } else if(user.deletedAt){
                 const userUpdate = {

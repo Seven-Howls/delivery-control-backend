@@ -15,6 +15,7 @@ interface UserTypeInstance extends Model<IUserType>, IUserType { }
 interface IUserTypeData {
     findById(id: string): Promise<IUserType | null>
     findAll(companyId:string): Promise<IUserType[] | null>
+    findPermissionByUserType(id:string): Promise<any>
 }
 
 export {

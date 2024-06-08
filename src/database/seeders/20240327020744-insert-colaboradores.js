@@ -4,10 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Buscar os IDs dos tipos de usuários, empresas e usuários
-    const tiposUsuarios = await queryInterface.sequelize.query('SELECT id FROM tipos_usuarios;', {
-      type: Sequelize.QueryTypes.SELECT
-    }).then(results => results.map(result => result.id));
-
+    
     const empresas = await queryInterface.sequelize.query('SELECT id FROM empresas;', {
       type: Sequelize.QueryTypes.SELECT
     }).then(results => results.map(result => result.id));
@@ -24,9 +21,13 @@ module.exports = {
 
     // Loop para criar colaboradores de exemplo
     for (let i = 1; i <= numColaboradores; i++) {
-      const tipoUsuarioId = tiposUsuarios[Math.floor(Math.random() * tiposUsuarios.length)];
       const empresaId = empresas[Math.floor(Math.random() * empresas.length)];
       const usuarioId = usuarios[Math.floor(Math.random() * usuarios.length)];
+      
+      const tiposUsuarios = await queryInterface.sequelize.query(`SELECT id FROM tipos_usuarios WHERE empresa_id = "${empresaId}";`, {
+        type: Sequelize.QueryTypes.SELECT
+      }).then(results => results.map(result => result.id));
+      const tipoUsuarioId = tiposUsuarios[Math.floor(Math.random() * tiposUsuarios.length)];
 
       colaboradores.push({
         id: uuidv4(),

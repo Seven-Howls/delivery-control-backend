@@ -59,7 +59,8 @@ export class UserData implements IUserData {
                 senha: data.password,
                 email: data.email,
                 createdAt: new Date(),
-                updatedAt: new Date()
+                updatedAt: new Date(),
+                deletedAt: null
             })
             await user.save();
 

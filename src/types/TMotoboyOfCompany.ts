@@ -1,5 +1,13 @@
+export type TMotoboyOfCompanyPagination = {
+    motoboy: TMotoboyOfCompany[],
+    page: number,
+    perPage: number,
+    total: number
+    
+} 
+
 export type TMotoboyOfCompany = {
-    [x: string]: any
+    toJSON(): any
     id: string,
     token?: string,
     empresaId: string,

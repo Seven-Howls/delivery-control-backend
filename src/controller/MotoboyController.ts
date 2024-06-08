@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import { MotoboyBusiness } from "../business/MotoboyBusiness";
 import { CustomError } from "../utils/CustomError";
+import { getPaginationParams } from "../utils/getPaginationParams";
 export class MotoboyController{
     private motoboyBusiness: MotoboyBusiness;
 
@@ -22,7 +23,8 @@ export class MotoboyController{
     getAllMotoboys = async (req: Request, res: Response) => {
         try{
             const token = req.headers.authorization as string;
-            const motoboy = await this.motoboyBusiness.getAllMotoboys(token);
+            const [page, perPage] = getPaginationParams(req.query);
+            const motoboy = await this.motoboyBusiness.getAllMotoboys(token, page, perPage);
             res.status(200).json(motoboy).send();
         }catch(error: CustomError | any){
             res.status(error.statusCode || 400).send({error: error.message})

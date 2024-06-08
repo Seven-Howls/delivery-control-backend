@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 import { TPersonalDataOfMotoboy } from "../types/TPersonalDataOfMotoboy";
-import { TMotoboyOfCompany } from "../types/TMotoboyOfCompany";
+import { TMotoboyOfCompany, TMotoboyOfCompanyPagination } from "../types/TMotoboyOfCompany";
 
 interface IMotoboy {
     id: string,
@@ -18,7 +18,7 @@ interface IMotoboyData {
     findMotoboyByUserId(usuarioId: string): Promise<TMotoboyOfCompany[]>
     findByUserIdAndCompany(usuarioId: string, empresaId: string): Promise<IMotoboy | null>
     findPersonalDataOfMotoboy(motoboyId: string): Promise< TPersonalDataOfMotoboy | null >
-    findAllByCompanyId(empresaId: string): Promise< IMotoboy[] | null >
+    findAllByCompanyId(empresaId: string, page: number, perPage: number): Promise< TMotoboyOfCompanyPagination[] | null >
     insert(usuarioId: string, empresaId: string): Promise<void>
 }
 

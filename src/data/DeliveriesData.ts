@@ -1,15 +1,15 @@
 import { Op, QueryTypes } from "sequelize";
-import { Deliveries, Status } from "../Definitions/index";
+import { Deliveries, DeliveryFee, Motoboy, PaymentMethod, Status, User } from "../Definitions/index";
 import { IDeliveries, IDeliveriesData } from "../models/InterfaceDeliveries";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { selectHistoryDeliveries } from "../database/querys/selectHistoryDeliveries";
 import { selectHistoryDeliveriesFull } from "../database/querys/selectHistoryDeliveriesFull";
 import { v4 as uuid4 } from "uuid";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
-import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { THistoryDeliveriesFull, THistoryDeliveriesFullPagination } from "../types/THistoryDeliveriesFull";
 import { generateUuid } from "../utils/generateUuid";
 import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
-import { selectHistoryDeliveryAll } from "../database/querys/selectHistoryDeliveryAll";
+import { All_entregas, numero_entregas, selectHistoryDeliveryAll } from "../database/querys/selectHistoryDeliveryAll";
 
 export class DeliveriesData implements IDeliveriesData {
     private deliveries: typeof Deliveries;
@@ -68,7 +68,6 @@ export class DeliveriesData implements IDeliveriesData {
                     ],
                 },
                 where: {
-                    statusId: 5,
                     motoboyId,
                     deletedAt: {
                         [Op.is]: null,
@@ -79,6 +78,9 @@ export class DeliveriesData implements IDeliveriesData {
                         model: Status,
                         as: "deliveriesStatus",
                         attributes: ["id", "nome", "nivel"],
+                        where:{
+                            nivel: 1
+                        }
                     },
                 ],
             });
@@ -122,17 +124,58 @@ export class DeliveriesData implements IDeliveriesData {
             throw new Error(err.message);
         }
     };
-    findHistoryFUll = async (companyId:string): Promise<THistoryDeliveriesFull[] | null> => {
+    findHistoryFUll = async (companyId: string, page: number, perPage: number): Promise<THistoryDeliveriesFullPagination | null> => {
         try {
-            const history: THistoryDeliveriesFull[] =
-                (await this.deliveries.sequelize?.query(
-                    selectHistoryDeliveryAll,
-                    {
-                        type: QueryTypes.SELECT,
-                        replacements: { companyId }
+            const offset = (page - 1) * perPage;
+            const {count, rows} = await this.deliveries.findAndCountAll({
+                where: {
+                    deletedAt: {
+                        [Op.is]: null,
                     }
-                )) as THistoryDeliveriesFull[];
-            return history;
+                },
+                attributes: ['id','valorProduto','taxaServico','valorLiquido','comandaId','createdAt','updatedAt'],
+                include: [
+                    {
+                        model: Motoboy,
+                        as: 'motoboy',
+                        attributes: ['id','usuarioId','empresaId'],
+                        where: {
+                            empresaId: companyId
+                        },
+                        include: [
+                            {
+                                model: User,
+                                as: 'usuario',
+                                attributes: ['id','nome']
+                            }
+                        ]
+                    },
+                    {
+                        model: Status,
+                        as: "deliveriesStatus",
+                        attributes: ['id','nivel','nome']
+                    },
+                    {
+                        model: DeliveryFee,
+                        as: 'taxaEntrega',
+                        attributes: ['id', 'valor', 'descricao']
+                    },
+                    {
+                        model: PaymentMethod,
+                        as: 'metodoPagamento',
+                        attributes: ['id','nome']
+                    }
+                ],
+                offset,
+                limit: perPage,
+                order: [['createdAt','DESC']]
+            })
+
+            return {
+                entregas: rows,
+                page,
+                perPage,
+                total: count } as unknown as THistoryDeliveriesFullPagination;
         } catch (err: any) {
             throw new Error(err.message);
         }

@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 import { THistoryDeliveries } from "../types/THistoryDeliveries";
 import { TDeliveryCreated } from "../types/TDeliveryCreated";
-import { THistoryDeliveriesFull } from "../types/THistoryDeliveriesFull";
+import { THistoryDeliveriesFull, THistoryDeliveriesFullPagination } from "../types/THistoryDeliveriesFull";
 import { TDataUpdateDeliveries } from "../types/TDataUpdateDeliveries";
 
 interface IDeliveries {
@@ -28,8 +28,8 @@ interface IDeliveriesData{
     findHistoryByMotoboy(motoboyId:string): Promise<THistoryDeliveries[] | null | undefined>,
     updateStatusDeliveryById(deliveryId: string, statusId:string): Promise< void >,
     insertDelivery(delivery: TDeliveryCreated): Promise<IDeliveries | null>,
-    findHistoryByMotoboyFUll(motoboyId:string): Promise<THistoryDeliveriesFull[] | null>
-    findHistoryFUll(companyId:string): Promise<THistoryDeliveriesFull[] | null>
+    findHistoryByMotoboyFUll(motoboyId:string ): Promise<THistoryDeliveriesFull[] | null>
+    findHistoryFUll(companyId:string , page:number, perPage:number): Promise<THistoryDeliveriesFullPagination | null>
     updateDataDeliveryById(data : TDataUpdateDeliveries): Promise< void |null>
 }
 

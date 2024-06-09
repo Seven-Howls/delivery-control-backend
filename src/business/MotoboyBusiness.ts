@@ -142,14 +142,14 @@ export class MotoboyBusiness {
             throw new CustomError(error.message, error.statusCode);
         }
     }
-    updateMotoboy = async (token: string, data: any, motoboyId:string): Promise<void> => {
+    updateMotoboy = async (token: string, data: any): Promise<void> => {
         try {
             if (!token) throw new CustomError("Token ausente na autenticação", 422);
     
             const isAuthorized = this.authenticator.getTokenData(token);
             if (!isAuthorized) throw new CustomError("Não autorizado", 401);
     
-            const motoboy = await this.motoboyData.findById(motoboyId);
+            const motoboy = await this.motoboyData.findById(isAuthorized.id);
             if (!motoboy) throw new CustomError("Motoboy não encontrado", 404);
     
             const usuarioId = motoboy.usuarioId;

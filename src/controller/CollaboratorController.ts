@@ -37,4 +37,16 @@ export class CollaboratorController {
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     };
+    
+    update = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const data: any = req.body
+            const collaboratoId = req.params.collaboratoId
+            await this.collaboratorBusiness.update(token,data,collaboratoId);
+            res.status(200).send({ message: "Dados do colaborador atualizados com sucesso" });
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    };
 }

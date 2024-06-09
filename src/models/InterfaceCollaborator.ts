@@ -1,7 +1,6 @@
 import { Model } from "sequelize";
-import { TCreateUserData } from "../types/TCreateUserData";
-import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
 import { TCollaboratorAndUser } from "../types/TCollaboratorAndUser";
+import { TUpdateCollaborator } from "../types/TUpdateCollaborator";
 
 interface ICollaborator {
     id: string,
@@ -21,6 +20,7 @@ interface ICollaboratorData {
     findCollaboratorByUserId(userId: string): Promise< ICollaborator[] | null >
     insertCollaborator(userId: string, companyId: string, typeId: string): Promise<ICollaborator | null>
     findCollaboratorsByCompanyId(companyId: string): Promise<TCollaboratorAndUser[] | null>
+    update(data: TUpdateCollaborator): Promise<void>
 }
 
 export {

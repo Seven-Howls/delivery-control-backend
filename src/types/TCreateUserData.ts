@@ -6,3 +6,4 @@ export type TCreateUserData = {
     email:string,
     typeId: string
 }
+

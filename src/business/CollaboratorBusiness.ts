@@ -9,6 +9,7 @@ import { SecurePasswordHandler } from "../services/SecurePasswordHandler";
 import { TLoginData } from "../types/TLoginData";
 import { TCreateUserData } from "../types/TCreateUserData";
 import { CustomError } from "../utils/CustomError";
+import { TUpdateUser } from "../types/TUpdateUser";
 
 export class CollaboratorBusiness {
     private userData: IUserData;
@@ -132,6 +133,36 @@ export class CollaboratorBusiness {
         if (!collaborators || collaborators.length === 0) throw new CustomError("Nenhum colaborador encontrado", 404);
     
         return collaborators;
+    }
+
+    update = async (token: string, data: any, collaboratorId:string): Promise<void> => {
+        try {
+            if (!token) throw new CustomError("Token ausente na autenticação", 422);
+    
+            const isAuthorized = this.authenticator.getTokenData(token);
+            if (!isAuthorized) throw new CustomError("Não autorizado", 401);
+    
+            const collaborator = await this.collaboratorData.findById(collaboratorId);
+            if (!collaborator) throw new CustomError("Colaborador não encontrado", 404);
+
+            const user = await this.userData.findById(collaborator.usuarioId)
+            if(!user) throw new CustomError("Usuario nao encontrado",404)  
+            user.deletedAt = null
+            if (data.nome) user.nome = data.nome;
+            if (data.cpf) user.cpf = data.cpf;
+            if (data.celular) user.celular = data.celular;
+            if (data.email) user.email = data.email;
+            if (data.typeId) collaborator.tipoId = data.typeId
+
+            if (Object.keys(user).length > 2) { 
+                await this.userData.updateUser({id: user.id,nome: user.nome, cpf: user.cpf, celular: user.celular, email: user.email, deletedAt: null});
+                await this.collaboratorData.update({id: collaborator.id,typeId: collaborator.tipoId});
+            } else {
+                throw new CustomError("Nenhum campo para atualizar", 400);
+            }
+        } catch (error: any) {
+            throw new CustomError(error.message, error.statusCode);
+        }
     }
     
 }

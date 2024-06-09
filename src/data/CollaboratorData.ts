@@ -1,10 +1,10 @@
 import { Op } from "sequelize";
 import { Collaborator } from "../Definitions/Colaborador";
 import { ICollaborator, ICollaboratorData } from "../models/InterfaceCollaborator";
-import { TCollaboratorAndCompany } from "../types/TCollaboratorAndCompany";
 import { Company, User } from "../Definitions";
 import { generateUuid } from "../utils/generateUuid";
 import { TCollaboratorAndUser } from "../types/TCollaboratorAndUser";
+import { TUpdateCollaborator } from "../types/TUpdateCollaborator";
 
 export class CollaboratorData implements ICollaboratorData {
     private collaboratorData: typeof Collaborator
@@ -109,6 +109,18 @@ export class CollaboratorData implements ICollaboratorData {
             });
 
             return collaborators as unknown as TCollaboratorAndUser[];
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    update = async (data: TUpdateCollaborator): Promise<void> => {
+        try {
+            await this.collaboratorData.update(data, {
+                where: {
+                    id: data.id
+                }
+            })
         } catch (error: any) {
             throw new Error(error.message);
         }

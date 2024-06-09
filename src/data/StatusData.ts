@@ -28,4 +28,21 @@ export class StatusData implements IStatusData {
         }
     }
 
+    getAll = async (): Promise<IStatus[] | null> => {
+        try {
+            const status = await this.status.findAll({
+                attributes: ['id','nome'],
+                where:{
+                    deletedAt: {
+                        [Op.is]: null
+                    }
+                }
+            })
+            
+            return status
+        } catch (error: any) {
+            throw new CustomError(error.message, 500);
+        }
+    }
+
 }

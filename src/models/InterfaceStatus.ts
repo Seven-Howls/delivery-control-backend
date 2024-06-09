@@ -13,6 +13,7 @@ interface StatusInstance extends Model<IStatus>, IStatus { }
 
 interface IStatusData {
     getStatusById(id: string): Promise<IStatus | null>
+    getAll(): Promise<IStatus[] | null>
 }
 
 export {

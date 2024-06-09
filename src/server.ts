@@ -11,6 +11,7 @@ import { userRouter } from './router/userRouter';
 import { companyRouter } from './router/companyRouter';
 import { userTypeRouter } from './router/userTypeRouter';
 import { permissionRouter } from './router/permissionRouter';
+import { statusRouter } from './router/statusRouter';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/api/v1/user', userRouter)
 app.use('/api/v1/companies', companyRouter)
 app.use('/api/v1/user-type', userTypeRouter)
 app.use('/api/v1/permission', permissionRouter)
+app.use('/api/v1/status', statusRouter)
 
 const port = process.env.API_PORT || 3000;
 

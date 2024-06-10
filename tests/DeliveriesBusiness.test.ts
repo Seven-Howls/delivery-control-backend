@@ -26,7 +26,9 @@ describe('deliveriesBusiness updateDeliveryStatusById', () => {
 
     it('deve encontrar e atualizar uma entrega', async () => {
         const colaboradorCriado = await deliveriesBusiness.updateDataDeliveryById(TokenEstatico, DataUpdateDelivery);
+
         expect(colaboradorCriado).toBe("Entrega atualizada com sucesso"); 
+
     
     });
 

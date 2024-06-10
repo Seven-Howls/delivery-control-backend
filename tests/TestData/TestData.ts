@@ -17,8 +17,9 @@ export const DataUpdateDelivery = {
     deliveryFeeId: "0224a854-d085-48dd-9e7c-e7d5eb590e4f",
     serviceFee: 5,
     productValue: 95,
+
     paymentMethodId: "24b51111-eb55-4746-8c5c-2b7eca48d8ab"
-};
+
 
 
 export const updatedData= {

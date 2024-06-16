@@ -7,7 +7,7 @@ import { UserTypePermissionsData } from "../src/data/UserTypePermissionsData";
 import { CollaboratorData } from "../src/data/CollaboratorData";
 import { DeliveryFeeData } from "../src/data/DeliveryFeeData";
 import { sequelize } from './SequelizeTest';
-import { DataUpdateDelivery, TokenEstatico } from "./TestData/TestData";
+import { DataUpdateDelivery, TokenEstatico, DataCreateDelivery } from "./TestData/TestData";
 
 
 const deliveriesData = new DeliveriesData();
@@ -23,15 +23,14 @@ describe('deliveriesBusiness updateDeliveryStatusById', () => {
     beforeAll(async () => {
         await sequelize.sync()
     });
-
     it('deve encontrar e atualizar uma entrega', async () => {
-        const colaboradorCriado = await deliveriesBusiness.updateDataDeliveryById(TokenEstatico, DataUpdateDelivery);
-
-        expect(colaboradorCriado).toBe("Entrega atualizada com sucesso"); 
-
-    
+        const entregaAtualizada = await deliveriesBusiness.updateDataDeliveryById(TokenEstatico, DataUpdateDelivery);
+        expect(entregaAtualizada).toBe("Entrega atualizada com sucesso"); 
     });
-
+    it('Deve criar uma entrega', async ()=>{
+        const entregaCriada = await deliveriesBusiness.createDelivery(TokenEstatico, DataCreateDelivery)
+        expect(entregaCriada).toEqual(DataCreateDelivery); 
+    });
     afterAll(async () => {
         await sequelize.close();
     });

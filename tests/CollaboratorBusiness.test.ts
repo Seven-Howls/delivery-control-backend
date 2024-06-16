@@ -28,7 +28,7 @@ describe('CollaboratorBusiness - login', () => {
         const tokenString = JSON.stringify(token);
         const collaboratorId = loginResponseObj.id;
         const updateResponse = await collaboratorBusiness.update(JSON.parse(tokenString),updatedData,collaboratorId);
-        expect(updateResponse).toBeUndefined;
+        expect(updateResponse).toBeUndefined();
     });
     
     it('Deve criar o Login de Um Colaborador', async () => {
